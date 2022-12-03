@@ -1,0 +1,14 @@
+{
+  "/graphql": {
+    "target": "https://localhost:7177/",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/api": {
+    "target": "https://localhost:7177",
+    "secure": false,
+    "logLevel": "debug",
+    "changeOrigin": true
+  }
+}

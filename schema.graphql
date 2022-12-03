@@ -1,0 +1,406 @@
+# This file was generated based on ".graphqlconfig". Do not edit manually.
+
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+"Information about the offset pagination."
+type CollectionSegmentInfo {
+  "Indicates whether more items exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more items exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+}
+
+type Mutation {
+  addFinanceRequest(input: finance_requestInput!): Response!
+  updateFinanceRequest(edit: finance_requestInput!): Response!
+  upsertFinanceProducts(input: [finance_productInput!]!): Response!
+  upsertFinanceRequestStatuses(input: [finance_request_statusInput!]!): Response!
+}
+
+type Query {
+  financeProducts(order: [finance_productSortInput!], where: finance_productFilterInput): [finance_product!]!
+  financeProductsPaginated(order: [finance_productSortInput!], skip: Int, take: Int, where: finance_productFilterInput): finance_productCollectionSegment
+  financeRequestLogs(order: [finance_request_logSortInput!], where: finance_request_logFilterInput): [finance_request_log!]!
+  financeRequestLogsPaginated(order: [finance_request_logSortInput!], skip: Int, take: Int, where: finance_request_logFilterInput): finance_request_logCollectionSegment
+  financeRequestStatuses(order: [finance_request_statusSortInput!], where: finance_request_statusFilterInput): [finance_request_status!]!
+  financeRequestStatusesPagnated(order: [finance_request_statusSortInput!], skip: Int, take: Int, where: finance_request_statusFilterInput): finance_request_statusCollectionSegment
+  financeRequests(order: [finance_requestSortInput!], where: finance_requestFilterInput): [finance_request!]!
+  financeRequestsPaginated(order: [finance_requestSortInput!], skip: Int, take: Int, where: finance_requestFilterInput): finance_requestCollectionSegment
+}
+
+type Response {
+  responseCode: Int!
+  responseLabel: String
+  responseMessage: String
+}
+
+type finance_product {
+  amount_min: Decimal
+  description: String
+  finance_product_id: UUID!
+  finance_request: [finance_request!]!
+  interest_rate: Decimal
+  term_min: Int
+  title: String
+}
+
+type finance_productCollectionSegment {
+  items: [finance_product!]
+  "Information to aid in pagination."
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type finance_request {
+  amountRequired: Decimal
+  dateOfBirth: LocalDate
+  email: String
+  finance_product: finance_product
+  finance_product_id: UUID
+  finance_request_id: UUID!
+  finance_request_log: [finance_request_log!]!
+  finance_request_status: finance_request_status
+  finance_request_status_id: UUID
+  firstName: String
+  lastName: String
+  mobile: String
+  referenceNo: String
+  term: Int
+  title: String
+}
+
+type finance_requestCollectionSegment {
+  items: [finance_request!]
+  "Information to aid in pagination."
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type finance_request_log {
+  _case: Int
+  content: String
+  date_created: Instant
+  description: String
+  finance_request: finance_request
+  finance_request_id: UUID
+  finance_request_log_id: UUID!
+  title: String
+}
+
+type finance_request_logCollectionSegment {
+  items: [finance_request_log!]
+  "Information to aid in pagination."
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+type finance_request_status {
+  _case: Int
+  description: String
+  finance_request: [finance_request!]!
+  finance_request_status_id: UUID!
+  title: String
+}
+
+type finance_request_statusCollectionSegment {
+  items: [finance_request_status!]
+  "Information to aid in pagination."
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
+
+enum ApplyPolicy {
+  AFTER_RESOLVER
+  BEFORE_RESOLVER
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+input ComparableGuidOperationFilterInput {
+  eq: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID!]
+  lt: UUID
+  lte: UUID
+  neq: UUID
+  ngt: UUID
+  ngte: UUID
+  nin: [UUID!]
+  nlt: UUID
+  nlte: UUID
+}
+
+input ComparableNullableOfDecimalOperationFilterInput {
+  eq: Decimal
+  gt: Decimal
+  gte: Decimal
+  in: [Decimal]
+  lt: Decimal
+  lte: Decimal
+  neq: Decimal
+  ngt: Decimal
+  ngte: Decimal
+  nin: [Decimal]
+  nlt: Decimal
+  nlte: Decimal
+}
+
+input ComparableNullableOfGuidOperationFilterInput {
+  eq: UUID
+  gt: UUID
+  gte: UUID
+  in: [UUID]
+  lt: UUID
+  lte: UUID
+  neq: UUID
+  ngt: UUID
+  ngte: UUID
+  nin: [UUID]
+  nlt: UUID
+  nlte: UUID
+}
+
+input ComparableNullableOfInstantOperationFilterInput {
+  eq: Instant
+  gt: Instant
+  gte: Instant
+  in: [Instant]
+  lt: Instant
+  lte: Instant
+  neq: Instant
+  ngt: Instant
+  ngte: Instant
+  nin: [Instant]
+  nlt: Instant
+  nlte: Instant
+}
+
+input ComparableNullableOfInt32OperationFilterInput {
+  eq: Int
+  gt: Int
+  gte: Int
+  in: [Int]
+  lt: Int
+  lte: Int
+  neq: Int
+  ngt: Int
+  ngte: Int
+  nin: [Int]
+  nlt: Int
+  nlte: Int
+}
+
+input ComparableNullableOfLocalDateOperationFilterInput {
+  eq: LocalDate
+  gt: LocalDate
+  gte: LocalDate
+  in: [LocalDate]
+  lt: LocalDate
+  lte: LocalDate
+  neq: LocalDate
+  ngt: LocalDate
+  ngte: LocalDate
+  nin: [LocalDate]
+  nlt: LocalDate
+  nlte: LocalDate
+}
+
+input ListFilterInputTypeOffinance_requestFilterInput {
+  all: finance_requestFilterInput
+  any: Boolean
+  none: finance_requestFilterInput
+  some: finance_requestFilterInput
+}
+
+input ListFilterInputTypeOffinance_request_logFilterInput {
+  all: finance_request_logFilterInput
+  any: Boolean
+  none: finance_request_logFilterInput
+  some: finance_request_logFilterInput
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  contains: String
+  endsWith: String
+  eq: String
+  in: [String]
+  ncontains: String
+  nendsWith: String
+  neq: String
+  nin: [String]
+  nstartsWith: String
+  or: [StringOperationFilterInput!]
+  startsWith: String
+}
+
+input finance_productFilterInput {
+  amount_min: ComparableNullableOfDecimalOperationFilterInput
+  and: [finance_productFilterInput!]
+  description: StringOperationFilterInput
+  finance_product_id: ComparableGuidOperationFilterInput
+  finance_request: ListFilterInputTypeOffinance_requestFilterInput
+  interest_rate: ComparableNullableOfDecimalOperationFilterInput
+  or: [finance_productFilterInput!]
+  term_min: ComparableNullableOfInt32OperationFilterInput
+  title: StringOperationFilterInput
+}
+
+input finance_productInput {
+  amount_min: Decimal
+  description: String
+  finance_product_id: UUID!
+  finance_request: [finance_requestInput!]!
+  interest_rate: Decimal
+  term_min: Int
+  title: String
+}
+
+input finance_productSortInput {
+  amount_min: SortEnumType
+  description: SortEnumType
+  finance_product_id: SortEnumType
+  interest_rate: SortEnumType
+  term_min: SortEnumType
+  title: SortEnumType
+}
+
+input finance_requestFilterInput {
+  amountRequired: ComparableNullableOfDecimalOperationFilterInput
+  and: [finance_requestFilterInput!]
+  dateOfBirth: ComparableNullableOfLocalDateOperationFilterInput
+  email: StringOperationFilterInput
+  finance_product: finance_productFilterInput
+  finance_product_id: ComparableNullableOfGuidOperationFilterInput
+  finance_request_id: ComparableGuidOperationFilterInput
+  finance_request_log: ListFilterInputTypeOffinance_request_logFilterInput
+  finance_request_status: finance_request_statusFilterInput
+  finance_request_status_id: ComparableNullableOfGuidOperationFilterInput
+  firstName: StringOperationFilterInput
+  lastName: StringOperationFilterInput
+  mobile: StringOperationFilterInput
+  or: [finance_requestFilterInput!]
+  referenceNo: StringOperationFilterInput
+  term: ComparableNullableOfInt32OperationFilterInput
+  title: StringOperationFilterInput
+}
+
+input finance_requestInput {
+  amountRequired: Decimal
+  dateOfBirth: LocalDate
+  email: String
+  finance_product: finance_productInput
+  finance_product_id: UUID
+  finance_request_id: UUID!
+  finance_request_log: [finance_request_logInput!]!
+  finance_request_status: finance_request_statusInput
+  finance_request_status_id: UUID
+  firstName: String
+  lastName: String
+  mobile: String
+  referenceNo: String
+  term: Int
+  title: String
+}
+
+input finance_requestSortInput {
+  amountRequired: SortEnumType
+  dateOfBirth: SortEnumType
+  email: SortEnumType
+  finance_product: finance_productSortInput
+  finance_product_id: SortEnumType
+  finance_request_id: SortEnumType
+  finance_request_status: finance_request_statusSortInput
+  finance_request_status_id: SortEnumType
+  firstName: SortEnumType
+  lastName: SortEnumType
+  mobile: SortEnumType
+  referenceNo: SortEnumType
+  term: SortEnumType
+  title: SortEnumType
+}
+
+input finance_request_logFilterInput {
+  _case: ComparableNullableOfInt32OperationFilterInput
+  and: [finance_request_logFilterInput!]
+  content: StringOperationFilterInput
+  date_created: ComparableNullableOfInstantOperationFilterInput
+  description: StringOperationFilterInput
+  finance_request: finance_requestFilterInput
+  finance_request_id: ComparableNullableOfGuidOperationFilterInput
+  finance_request_log_id: ComparableGuidOperationFilterInput
+  or: [finance_request_logFilterInput!]
+  title: StringOperationFilterInput
+}
+
+input finance_request_logInput {
+  _case: Int
+  content: String
+  date_created: Instant
+  description: String
+  finance_request: finance_requestInput
+  finance_request_id: UUID
+  finance_request_log_id: UUID!
+  title: String
+}
+
+input finance_request_logSortInput {
+  _case: SortEnumType
+  content: SortEnumType
+  date_created: SortEnumType
+  description: SortEnumType
+  finance_request: finance_requestSortInput
+  finance_request_id: SortEnumType
+  finance_request_log_id: SortEnumType
+  title: SortEnumType
+}
+
+input finance_request_statusFilterInput {
+  _case: ComparableNullableOfInt32OperationFilterInput
+  and: [finance_request_statusFilterInput!]
+  description: StringOperationFilterInput
+  finance_request: ListFilterInputTypeOffinance_requestFilterInput
+  finance_request_status_id: ComparableGuidOperationFilterInput
+  or: [finance_request_statusFilterInput!]
+  title: StringOperationFilterInput
+}
+
+input finance_request_statusInput {
+  _case: Int
+  description: String
+  finance_request: [finance_requestInput!]!
+  finance_request_status_id: UUID!
+  title: String
+}
+
+input finance_request_statusSortInput {
+  _case: SortEnumType
+  description: SortEnumType
+  finance_request_status_id: SortEnumType
+  title: SortEnumType
+}
+
+
+scalar UUID
+
+"Represents an instant on the global timeline, with nanosecond resolution."
+scalar Instant
+
+"LocalDate is an immutable struct representing a date within the calendar, with no reference to a particular time zone or time of day."
+scalar LocalDate
+
+"LocalTime is an immutable struct representing a time of day, with no reference to a particular calendar, time zone or date."
+scalar LocalTime
+
+"The `Upload` scalar type represents a file upload."
+scalar Upload
+
+"The built-in `Decimal` scalar type."
+scalar Decimal

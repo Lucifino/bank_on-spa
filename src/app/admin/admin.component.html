@@ -1,0 +1,124 @@
+<div class="flex w-full h-full" fxLayout.lt-md="column">
+  <div class="w-4rem flex-wrap align-content-between" fxLayoutAlign="space-between space-between" fxLayout="row"
+    fxHide fxFlex.gt-md fxShow.gt-sm>
+    <div class="w-full p-2">
+
+    </div>
+    <div class="flex flex-wrap card-container green-container align-content-center w-full">
+
+      <ng-container [ngTemplateOutlet]="menuItem"
+                    [ngTemplateOutletContext]="{icon: 'fa-home-blank', toolTip: 'Dashboard', route: '' }"
+      ></ng-container>
+
+      <ng-container [ngTemplateOutlet]="menuItem"
+        [ngTemplateOutletContext]="{icon: 'fa-gear', toolTip: 'Settings', route: 'settings' }"
+        ></ng-container>
+    </div>
+    <div class="flex flex-column w-full">
+      <ng-container [ngSwitch]="isDarkEnabled">
+        <div (click)="enableDarkMode()"
+          class="flex w-full justify-content-center align-content-center p-3 cursor-pointer hover:bg-gray-100"
+          pTooltip="Enable Dark Mode" *ngSwitchCase="false">
+          <i class="fa-duotone fa-moon"></i>
+        </div>
+        <div (click)="disableDarkMode()"
+          class="flex w-full justify-content-center align-content-center p-3 cursor-pointer hover:bg-gray-100"
+          pTooltip="Disable Dark Mode" *ngSwitchCase="true">
+          <i class="fa-duotone fa-sun"></i>
+        </div>
+      </ng-container>
+      <div class="flex w-full justify-content-center align-content-center p-3 cursor-pointer hover:bg-gray-100"
+        pTooltip="Log Out" (click)="logout()">
+        <i class="fa-duotone fa-arrow-right-from-bracket"></i>
+      </div>
+    </div>
+  </div>
+  <div class="h-full bg-gray-100 w-full overflow-scroll">
+    <div [ngClass.gt-sm]="['m-6']" [ngClass.lt-md]="['m-3']">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+
+
+  <div class="w-full bg-white" fxShow.lt-md fxHide>
+    <div class="w-full justify-content-between align-items-center align-content-center p-3 flex">
+      <div class="cursor-pointer" (click)="showMobileMenu=true"><i class="fa-duotone fa-bars text-2xl"></i></div>
+    </div>
+  </div>
+
+  <p-sidebar position="bottom" [(visible)]="showMobileMenu" styleClass="h-full" [showCloseIcon]="false">
+    <div class="relative h-full">
+
+      <ng-container [ngTemplateOutlet]="menuItem"
+        [ngTemplateOutletContext]="{icon: 'fa-house',toolTip: 'Home', route: '' }"></ng-container>
+
+      <ng-container [ngTemplateOutlet]="menuItem"
+        [ngTemplateOutletContext]="{icon: 'fa-gear', toolTip: 'Settings', route: 'settings' }"
+        ></ng-container>
+      <ng-container [ngSwitch]="isDarkEnabled">
+
+        <div fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3']" [ngClass.gt-sm]="['justify-content-center']"
+          (click)="enableDarkMode()" *ngSwitchCase="false"
+          class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"><i
+            class="fa-duotone fa-moon"></i>
+          <div fxHide.gt-sm fxShow>Enable Dark Mode</div>
+        </div>
+
+        <div fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3']" [ngClass.gt-sm]="['justify-content-center']"
+          (click)="disableDarkMode()" *ngSwitchCase="true"
+          class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"><i
+            class="fa-duotone fa-sun"></i>
+          <div fxHide.gt-sm fxShow>Disable Dark Mode</div>
+        </div>
+
+      </ng-container>
+
+      <div
+        class="absolute bottom-0 bg-white w-full justify-content-between align-items-center align-content-center flex">
+        <div class="cursor-pointer" (click)="showMobileMenu=false"><i class="fa-duotone fa-xmark text-2xl"></i></div>
+      </div>
+    </div>
+
+  </p-sidebar>
+
+</div>
+
+<ng-template #menuItem let-toolTip='toolTip' let-route='route' let-modal='modal' let-icon='icon' let-items='items' let-subMenu='subMenu'>
+  <div *ngIf="items" fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3', 'border-round']"
+       [ngClass.gt-sm]="['justify-content-center']"
+       class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"
+       (click)="routeTo(route)"
+       [pTooltip]="toolTip" tooltipPosition="right"><i class="fa-duotone" [class]="icon"></i>
+
+  </div>
+  <ng-container *ngIf="subMenu; else normalButton" >
+    <div *ngIf="!modal" fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3', 'border-round']"
+         [ngClass.gt-sm]="['justify-content-center']"
+         class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"
+         [pTooltip]="toolTip" tooltipPosition="right"><i class="fa-duotone" [class]="icon"></i>
+      <div fxHide.gt-sm fxShow>{{toolTip}}</div>
+    </div>
+
+  </ng-container>
+  <ng-template #normalButton>
+    <div *ngIf="!modal" fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3', 'border-round']"
+         [ngClass.gt-sm]="['justify-content-center']"
+         class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"
+         [class.bg-gray-100]="(routeUrl=='/admin/'+route) || (routeUrl=='/admin'+route)" (click)="routeTo(route)"
+         [pTooltip]="toolTip" tooltipPosition="right"><i class="fa-duotone" [class]="icon"></i>
+      <div fxHide.gt-sm fxShow>{{toolTip}}</div>
+    </div>
+    <div *ngIf="modal" fxLayoutGap.lt-md="1rem" [ngClass.lt-md]="['p-3']" [ngClass.gt-sm]="['justify-content-center']"
+         class="flex w-full align-items-center h-4rem font-bold hover:bg-gray-100 cursor-pointer"
+         [pTooltip]="toolTip" tooltipPosition="right"><i class="fa-duotone" [class]="icon"></i>
+      <div fxHide.gt-sm fxShow>{{toolTip}}</div>
+    </div>
+  </ng-template>
+
+
+</ng-template>
+
+
+
+<p-confirmDialog key="confirmDialog"></p-confirmDialog>
+

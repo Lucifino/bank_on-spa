@@ -1,0 +1,23 @@
+.response-box {
+  text-align: center;
+  min-width: 20vw;
+  .icon {
+    font-size: 5rem;
+    line-height: 1rem;
+  }
+  .username-box {
+    background: var(--surface-100);
+    font-weight: 600;
+    font-size: 2rem;
+    border-radius: 0.5rem;
+  }
+}
+
+.nav-bar {
+  .p-menubar {
+    background: var(--blue-800);
+    margin-right: -1px;
+    border-radius: 0 !important;
+    border-color: var(--blue-800);
+  }
+}

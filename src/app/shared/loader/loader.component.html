@@ -1,0 +1,5 @@
+<ngx-ui-loader [fgsTemplate]="foregroundSpinner" [fgsSize]="200" [hasProgressBar]="false"
+               overlayColor="rgba(255,255,255,.8)" textColor="#000000"></ngx-ui-loader>
+<ng-template #foregroundSpinner>
+  <ng-lottie [options]="lottieOptions.loading" height="200px"></ng-lottie>
+</ng-template>
