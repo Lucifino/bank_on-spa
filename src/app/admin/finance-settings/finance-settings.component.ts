@@ -1,4 +1,73 @@
 import { Component, OnInit } from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {ConfirmationService} from "primeng/api";
+import {Title} from "@angular/platform-browser";
+import {Apollo, gql} from "apollo-angular";
+import {v4 as uuidv4} from "uuid";
+import {
+  Mutation,
+  Query
+} from "../../../service/graphql";
+
+const UPSERT_FINANCE_STATUS_MUTATION = gql`
+  mutation ($input: [FinanceRequestStatusInput!]!) {
+    UpsertFinanceRequestStatuses(input: $input) {
+      ResponseCode
+      ResponseLabel
+      ResponseMessage
+    }
+  }`;
+
+const UPSERT_FINANCE_PRODUCT_MUTATION = gql`
+  mutation ($input: [FinanceProductInput!]!) {
+    UpsertFinanceProducts(input: $input) {
+      ResponseCode
+      ResponseLabel
+      ResponseMessage
+    }
+  }`;
+
+const FINANCE_STATUS_PAGINATED_QUERY = gql`
+  query {
+    FinanceRequestStatusesPagnated {
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+      totalCount
+      items {
+        FinanceRequestStatusId
+        Title
+        Description
+        _case
+        _Deleted
+      }
+    }
+  }
+`;
+
+const FINANCE_PRODUCT_PAGINATED_QUERY = gql`
+  query {
+    FinanceProductsPaginated {
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+      totalCount
+      items{
+        FinanceProductId
+        Title
+        Description
+        InterestRate
+        TermMin
+        AmountMin
+        _Deleted
+        MonthsFree
+      }
+    }
+  }
+`;
+
 
 @Component({
   selector: 'app-finance-settings',
@@ -7,9 +76,133 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FinanceSettingsComponent implements OnInit {
 
-  constructor() { }
+  libraryForm: FormGroup = new FormGroup({
+    financeStatusFormArray: new FormArray([]),
+    financeProductFormArray: new FormArray([]),
+  })
+
+  get financeStatusFormArray(): FormArray {
+    return this.libraryForm.get('financeStatusFormArray') as FormArray;
+  }
+  get financeProductFormArray(): FormArray {
+    return this.libraryForm.get('financeProductFormArray') as FormArray;
+  }
+
+  addFinanceStatusFormArray(status?: any): void {
+    console.log(status)
+    if ((!this.financeStatusFormArray.value.some((m: any) => m.FinanceRequestStatusId == status?.FinanceRequestStatusId) && status) || !status) {
+      this.financeStatusFormArray.push(new FormGroup({
+        Description: new FormControl(status?.Description),
+        FinanceRequestStatusId: new FormControl(status?.FinanceRequestStatusId  ?? uuidv4()),
+        Title: new FormControl(status?.Title),
+        _case: new FormControl(status?._case ?? -1),
+        _Deleted: new FormControl(status?._Deleted?? false)
+      }));
+    }
+    console.log(this.financeStatusFormArray.value)
+  }
+
+  addFinanceProductFormArray(product?: any): void {
+    if ((!this.financeProductFormArray.value.some((m: any) => m.FinanceProductId == product?.FinanceProductId) && product) || !product) {
+      this.financeProductFormArray.push(new FormGroup({
+        Description: new FormControl(product?.Description),
+        FinanceProductId: new FormControl(product?.FinanceProductId  ?? uuidv4()),
+        Title: new FormControl(product?.Title),
+        InterestRate: new FormControl(product?.InterestRate),
+        TermMin: new FormControl(product?.TermMin ?? -1),
+        AmountMin: new FormControl(product?.AmountMin),
+        MonthsFree: new FormControl(product?.MonthsFree),
+        _Deleted: new FormControl(product?._Deleted?? false)
+      }));
+    }
+  }
+
+  constructor(
+
+    private apollo: Apollo,
+    private formBuilder: FormBuilder,
+    private confirmationService: ConfirmationService,
+    private titleService: Title,
+  ) { }
 
   ngOnInit(): void {
+    this.getFinanceProducts()
+    this.getFinanceStatuses()
+  }
+
+  saveFinanceStatuses() {
+    console.log(this.financeStatusFormArray.value)
+    this.apollo.mutate<Mutation>({
+      mutation: UPSERT_FINANCE_STATUS_MUTATION,
+      variables: {
+        input: this.financeStatusFormArray.value
+      }
+    }).subscribe(m => {
+      if (m.data?.UpsertFinanceRequestStatuses.ResponseCode === 202) {
+        console.log(m)
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          acceptLabel: 'Continue',
+          rejectVisible: false,
+          message: 'Statuses successfully updated',
+          accept: () => {
+            this.getFinanceStatuses();
+          }
+        })
+      };
+    });
+  }
+
+  getFinanceStatuses(): void {
+    this.apollo.watchQuery<Query>({
+      query: FINANCE_STATUS_PAGINATED_QUERY
+    }).valueChanges.subscribe(({ data, loading }) => {
+      data.FinanceRequestStatusesPagnated?.items?.forEach(m => {
+        this.addFinanceStatusFormArray(m);
+      });
+    });
+  }
+
+  saveFinanceProducts() {
+    this.apollo.mutate<Mutation>({
+      mutation: UPSERT_FINANCE_PRODUCT_MUTATION,
+      variables: {
+        input: this.financeProductFormArray.value
+      }
+    }).subscribe(m => {
+      if (m.data?.UpsertFinanceProducts.ResponseCode === 202) {
+        console.log(m)
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          acceptLabel: 'Continue',
+          rejectVisible: false,
+          message: 'Products successfully updated',
+          accept: () => {
+            this.getFinanceProducts();
+          }
+        })
+      };
+    });
+  }
+
+  getFinanceProducts(): void {
+    this.apollo.watchQuery<Query>({
+      query: FINANCE_PRODUCT_PAGINATED_QUERY
+    }).valueChanges.subscribe(({ data, loading }) => {
+      data.FinanceProductsPaginated?.items?.forEach(m => {
+        this.addFinanceProductFormArray(m);
+      });
+    });
+  }
+
+  removeFinanceProduct(FinanceProduct: any) {
+    console.log(FinanceProduct)
+    FinanceProduct.controls['_Deleted'].setValue(true);
+  }
+
+  removeFinanceStatus(FinanceStatus: any) {
+    console.log(FinanceStatus)
+    FinanceStatus.controls['_Deleted'].setValue(true);
   }
 
 }

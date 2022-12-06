@@ -1,0 +1,35 @@
+<p>finance-request-quotation works!</p>
+<p-fieldset [formGroup]="quoteFinanceRequestForm" legend="Pullout Form" styleClass="flex flex-column mx-4">
+  <div class="flex flex-column gap-3">
+    <div class="grid">
+      {{this.quoteFinanceRequestForm.value.Title}}
+      {{this.quoteFinanceRequestForm.value.FirstName}}
+      {{this.quoteFinanceRequestForm.value.LastName}}
+    </div>
+
+    <div class="grid">
+      {{this.quoteFinanceRequestForm.value.DateOfBirth}}
+      {{this.quoteFinanceRequestForm.value.Email}}
+      {{this.quoteFinanceRequestForm.value.Mobile}}
+    </div>
+
+    <div class="grid">
+      {{this.chosenProduct?.Title}}
+      {{this.quoteFinanceRequestForm.value.Term}}
+      {{this.quoteFinanceRequestForm.value.AmountRequired}}
+    </div>
+    <div class="grid">
+      {{this.quoteFinanceRequestForm.value.TotalRepayment}}
+      {{this.quoteFinanceRequestForm.value.MonthlyRepayment}}
+    </div>
+  </div>
+
+  <p-confirmDialog appendTo="body" ></p-confirmDialog>
+
+
+</p-fieldset>
+<div class="w-full">
+  <div class="flex mx-4 justify-content-end mt-4">
+    <p-button label="Submit" [disabled]="quoteFinanceRequestForm.invalid" (onClick)="editFinanceRequest()"></p-button>
+  </div>
+</div>

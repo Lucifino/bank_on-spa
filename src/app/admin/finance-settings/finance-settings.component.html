@@ -1,1 +1,138 @@
 <p>finance-settings works!</p>
+<p-divider></p-divider>
+<div class="flex my-5 align-items-center" >
+  <div class="w-4">
+    <div class="font-semibold text-lg mb-2">Finance Status</div>
+    <div class="text-500">List of statuses for Finance Requests</div>
+  </div>
+  <div class="w-full">
+    <form [formGroup]="libraryForm" (submit)="saveFinanceStatuses()">
+      <div class="surface-card shadow-1 p-4 w-full border-round">
+
+        <ng-container formArrayName="financeStatusFormArray">
+          <p-table [value]="financeStatusFormArray.controls" class="w-full">
+            <ng-template pTemplate="header">
+              <tr>
+                <th width="100">Title</th>
+                <th width="400">Description</th>
+                <th width="50">Case</th>
+                <th width="50"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-status let-i="rowIndex">
+              <tr *ngIf="!status.value._Deleted">
+                <ng-container [formGroupName]="i">
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="es-label" placeholder="Title" formControlName="Title" type="text" pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="description" placeholder="Description" formControlName="Description" type="text"
+                             pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input pInputText name="_case" id="code" formControlName="_case" type="number" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid">
+                      <button pButton label="x" class="p-button-danger" (click)="removeFinanceStatus(status)"></button>
+                    </div>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <div class="flex justify-content-between mt-3">
+          <button pButton label="Add New Status" (click)="addFinanceStatusFormArray(undefined)" type="button"></button>
+          <button pButton label="Save Changes" type="submit"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<p-divider></p-divider>
+<div class="flex my-5 align-items-center" >
+  <div class="w-4">
+    <div class="font-semibold text-lg mb-2">Finance Products</div>
+    <div class="text-500">List of products for Finance Requests</div>
+  </div>
+  <div class="w-full">
+    <form [formGroup]="libraryForm" (submit)="saveFinanceProducts()">
+      <div class="surface-card shadow-1 p-4 w-full border-round">
+
+        <ng-container formArrayName="financeProductFormArray">
+          <p-table [value]="financeProductFormArray.controls" class="w-full">
+            <ng-template pTemplate="header">
+              <tr>
+                <th width="150">Title</th>
+                <th width="200">Description</th>
+                <th width="150">Interest Rate</th>
+                <th width="50">Minimum Terms</th>
+                <th width="50">Months Free</th>
+                <th width="200">Minimum Amount</th>
+                <th width="50"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-product let-i="rowIndex">
+              <tr *ngIf="!product.value._Deleted">
+                <ng-container [formGroupName]="i">
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="es-label2" placeholder="Title" formControlName="Title" type="text" pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="description2" placeholder="Description" formControlName="Description" type="text"
+                             pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <p-inputNumber formControlName="InterestRate" mode="decimal" [minFractionDigits]="6"></p-inputNumber>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input pInputText name="TermMin" id="TermMin" formControlName="TermMin" type="number" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input pInputText name="MonthsFree" id="MonthsFree" formControlName="MonthsFree" type="number" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <p-inputNumber formControlName="AmountMin" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+                    </div>
+                  </td>
+
+                  <td>
+                    <div class="p-fluid">
+                      <button pButton label="x" class="p-button-danger" (click)="removeFinanceStatus(product)"></button>
+                    </div>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <div class="flex justify-content-between mt-3">
+          <button pButton label="Add New Status" (click)="addFinanceProductFormArray(undefined)" type="button"></button>
+          <button pButton label="Save Changes" type="submit"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<p-divider></p-divider>
+
+
+<p-confirmDialog></p-confirmDialog>

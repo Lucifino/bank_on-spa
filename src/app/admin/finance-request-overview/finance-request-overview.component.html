@@ -1,1 +1,166 @@
 <p>finance-request-overview works!</p>
+
+<div class="flex flex-wrap mt-5 lg:mt-0 mb-8 lg:mb-0">
+  <div class="flex flex-column w-full">
+    <ng-container [formGroup]="requestTableFilter">
+      <div class="w-full border-round mb-3" [ngClass.gt-sm]="['bg-gray-50', 'p-4']">
+        <div class="flex" fxLayout.lt-md="column" fxLayoutGap.gt-sm="1rem">
+<!--          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-4']">-->
+<!--            <div class="field">-->
+<!--              <input pInputText formControlName="name" placeholder="Title" />-->
+<!--            </div>-->
+<!--          </div>-->
+
+          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-4']">
+            <div class="field">
+              <p-dropdown [options]="financeProductsDropdown"
+                          formControlName="FinanceProductId"
+                          appendTo="body"
+                          optionLabel="title"
+                          optionValue="FinanceProductId"
+                          [filter]="true"
+                          placeholder="Choose Product"
+                          [showClear]="true"
+              >
+
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-2']">
+            <div class="field">
+              <button pButton label="Filter" type="button" icon="fa-duotone fa-magnifying-glass"
+                      (click)="getFinanceRequestsPaginated(0)"></button>
+            </div>
+          </div>
+          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-2']">
+            <div class="field">
+              <button pButton [disabled]="requestTableFilter.pristine" class="p-button-danger" label="Reset" type="button"
+                      icon="fa-duotone fa-xmark" (click)="getFinanceRequestsPaginated()"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+    <div class="flex justify-content-between justify-content-center mt-3">
+      <div class="font-bold text-xl sm:text-2xl">Finance Requests</div>
+      <button class="p-button-sm" pButton label="Add New Finance Request" (click)="addFinanceRequestDialogVisible=true"></button>
+    </div>
+    <div class="surface-card shadow-1 p-4 mt-4 w-full border-round">
+      <p-table [value]="FinanceRequestsGroup?.items ?? []"
+               selectionMode="single"
+               [(selection)]="selectedFinanceRequest"
+               dataKey="asc_no"
+               (onRowSelect)="checkFinanceRequest($event)"
+      >
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Reference No</th>
+            <th>Name</th>
+            <th>Amount Required</th>
+            <th>Chosen Product</th>
+            <th>Date Of Application</th>
+            <th>Status</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-request>
+          <tr [pSelectableRow]="request">
+            <td>{{request.ReferenceNo}}</td>
+            <td>{{request.Title}} {{request.FirstName}} {{request.LastName}}</td>
+            <td>{{request.AmountRequired}}</td>
+            <td>{{request.FinanceProductId?.Title? request.FinanceProductId?.Title: "Not Set"}}</td>
+            <td>{{request.DateOfApplication | date: 'mediumDate'}}</td>
+            <td>{{request.FinanceRequestStatus?.Title}}</td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="3">
+              <div class="text-500 text-sm">No Requests yet, add one now!</div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+      <p-paginator [rows]="10" [showCurrentPageReport]="true" #requestPaginator [totalRecords]="FinanceRequestsGroup?.totalCount || 0"
+                   (onPageChange)="getFinanceRequestsPaginated(requestPaginator.rows*requestPaginator.getPage())"></p-paginator>
+    </div>
+  </div>
+</div>
+
+<p-sidebar position="right" [(visible)]="addFinanceRequestDialogVisible" [style]="{'height': '100%'}"
+>
+  <div class="text-xl font-bold mb-4">Add New Finance Request</div>
+  <form [formGroup]="financeRequestForm" >
+    <div class="p-fluid">
+      <div class="field">
+        <label>Title</label>
+        <p-dropdown [options]="titleDropdown"
+                    formControlName="Title"
+                    appendTo="body"
+                    optionLabel="label"
+                    optionValue="code"
+                    [filter]="true"
+                    placeholder="Choose Title"
+                    [showClear]="true"
+        >
+
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="FirstName">Firstname</label>
+        <input pInputText name="FirstName" id="FirstName" formControlName="FirstName" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="LastName">Lastname</label>
+        <input pInputText name="LastName" id="LastName" formControlName="LastName" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="Email">Email</label>
+        <input pInputText name="Email" id="Email" formControlName="Email" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="Mobile">Mobile Number</label>
+        <input pInputText name="Mobile" id="Mobile" formControlName="Mobile" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label>Date Of Birth</label>
+        <p-calendar formControlName="DateOfBirth" hourFormat="12" appendTo="body"></p-calendar>
+      </div>
+    </div>
+
+
+
+    <div class="p-fluid">
+      <div class="field">
+        <label>Number of Terms (1 term = 3 months)</label>
+        <input pInputText name="Term" id="Term" formControlName="Term" type="number" />
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label>Amount Required</label>
+        <p-inputNumber formControlName="AmountRequired" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
+      </div>
+    </div>
+
+
+    <div class="flex justify-content-end">
+      <button id="submitBtn1" pButton label="Add Using GraphQL" type="submit" (click)="addFinanceRequest()"></button>
+
+      <button id="submitBtn2" pButton label="Add Using REST" type="submit" (click)="insertFinanceRequest()"></button>
+    </div>
+  </form>
+</p-sidebar>
+
+<p-confirmDialog></p-confirmDialog>

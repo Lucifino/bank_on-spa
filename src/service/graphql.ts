@@ -29,6 +29,11 @@ export enum ApplyPolicy {
   BeforeResolver = 'BEFORE_RESOLVER'
 }
 
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']>;
+  neq?: InputMaybe<Scalars['Boolean']>;
+};
+
 /** Information about the offset pagination. */
 export type CollectionSegmentInfo = {
   __typename?: 'CollectionSegmentInfo';
@@ -128,121 +133,395 @@ export type ComparableNullableOfLocalDateOperationFilterInput = {
   nlte?: InputMaybe<Scalars['LocalDate']>;
 };
 
-export type ListFilterInputTypeOffinance_RequestFilterInput = {
-  all?: InputMaybe<Finance_RequestFilterInput>;
-  any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<Finance_RequestFilterInput>;
-  some?: InputMaybe<Finance_RequestFilterInput>;
+export type FinanceProduct = {
+  __typename?: 'FinanceProduct';
+  AmountMin?: Maybe<Scalars['Decimal']>;
+  Description?: Maybe<Scalars['String']>;
+  FinanceProductId: Scalars['UUID'];
+  FinanceRequest?: Maybe<Array<FinanceRequest>>;
+  InterestRate?: Maybe<Scalars['Decimal']>;
+  MonthsFree?: Maybe<Scalars['Int']>;
+  TermMin?: Maybe<Scalars['Int']>;
+  Title?: Maybe<Scalars['String']>;
+  _Deleted?: Maybe<Scalars['Boolean']>;
 };
 
-export type ListFilterInputTypeOffinance_Request_LogFilterInput = {
-  all?: InputMaybe<Finance_Request_LogFilterInput>;
+export type FinanceProductCollectionSegment = {
+  __typename?: 'FinanceProductCollectionSegment';
+  items?: Maybe<Array<FinanceProduct>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FinanceProductFilterInput = {
+  AmountMin?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
+  Description?: InputMaybe<StringOperationFilterInput>;
+  FinanceProductId?: InputMaybe<ComparableGuidOperationFilterInput>;
+  FinanceRequest?: InputMaybe<ListFilterInputTypeOfFinanceRequestFilterInput>;
+  InterestRate?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
+  MonthsFree?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
+  TermMin?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
+  Title?: InputMaybe<StringOperationFilterInput>;
+  _Deleted?: InputMaybe<BooleanOperationFilterInput>;
+  and?: InputMaybe<Array<FinanceProductFilterInput>>;
+  or?: InputMaybe<Array<FinanceProductFilterInput>>;
+};
+
+export type FinanceProductInput = {
+  AmountMin?: InputMaybe<Scalars['Decimal']>;
+  Description?: InputMaybe<Scalars['String']>;
+  FinanceProductId: Scalars['UUID'];
+  FinanceRequest?: InputMaybe<Array<FinanceRequestInput>>;
+  InterestRate?: InputMaybe<Scalars['Decimal']>;
+  MonthsFree?: InputMaybe<Scalars['Int']>;
+  TermMin?: InputMaybe<Scalars['Int']>;
+  Title?: InputMaybe<Scalars['String']>;
+  _Deleted?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type FinanceProductSortInput = {
+  AmountMin?: InputMaybe<SortEnumType>;
+  Description?: InputMaybe<SortEnumType>;
+  FinanceProductId?: InputMaybe<SortEnumType>;
+  InterestRate?: InputMaybe<SortEnumType>;
+  MonthsFree?: InputMaybe<SortEnumType>;
+  TermMin?: InputMaybe<SortEnumType>;
+  Title?: InputMaybe<SortEnumType>;
+  _Deleted?: InputMaybe<SortEnumType>;
+};
+
+export type FinanceRequest = {
+  __typename?: 'FinanceRequest';
+  AmountRequired?: Maybe<Scalars['Decimal']>;
+  DateOfApplication?: Maybe<Scalars['LocalDate']>;
+  DateOfBirth?: Maybe<Scalars['LocalDate']>;
+  Email?: Maybe<Scalars['String']>;
+  FinanceProduct?: Maybe<FinanceProduct>;
+  FinanceProductId?: Maybe<Scalars['UUID']>;
+  FinanceRequestId: Scalars['UUID'];
+  FinanceRequestLog?: Maybe<Array<FinanceRequestLog>>;
+  FinanceRequestStatus?: Maybe<FinanceRequestStatus>;
+  FinanceRequestStatusId?: Maybe<Scalars['UUID']>;
+  FirstName?: Maybe<Scalars['String']>;
+  LastName?: Maybe<Scalars['String']>;
+  Mobile?: Maybe<Scalars['String']>;
+  MonthlyRepayment?: Maybe<Scalars['Decimal']>;
+  ReferenceNo?: Maybe<Scalars['String']>;
+  Term?: Maybe<Scalars['Int']>;
+  Title?: Maybe<Scalars['String']>;
+  TotalRepayment?: Maybe<Scalars['Decimal']>;
+  _Deleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type FinanceRequestCollectionSegment = {
+  __typename?: 'FinanceRequestCollectionSegment';
+  items?: Maybe<Array<FinanceRequest>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FinanceRequestFilterInput = {
+  AmountRequired?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
+  DateOfApplication?: InputMaybe<ComparableNullableOfLocalDateOperationFilterInput>;
+  DateOfBirth?: InputMaybe<ComparableNullableOfLocalDateOperationFilterInput>;
+  Email?: InputMaybe<StringOperationFilterInput>;
+  FinanceProduct?: InputMaybe<FinanceProductFilterInput>;
+  FinanceProductId?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  FinanceRequestId?: InputMaybe<ComparableGuidOperationFilterInput>;
+  FinanceRequestLog?: InputMaybe<ListFilterInputTypeOfFinanceRequestLogFilterInput>;
+  FinanceRequestStatus?: InputMaybe<FinanceRequestStatusFilterInput>;
+  FinanceRequestStatusId?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  FirstName?: InputMaybe<StringOperationFilterInput>;
+  LastName?: InputMaybe<StringOperationFilterInput>;
+  Mobile?: InputMaybe<StringOperationFilterInput>;
+  MonthlyRepayment?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
+  ReferenceNo?: InputMaybe<StringOperationFilterInput>;
+  Term?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
+  Title?: InputMaybe<StringOperationFilterInput>;
+  TotalRepayment?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
+  _Deleted?: InputMaybe<BooleanOperationFilterInput>;
+  and?: InputMaybe<Array<FinanceRequestFilterInput>>;
+  or?: InputMaybe<Array<FinanceRequestFilterInput>>;
+};
+
+export type FinanceRequestInput = {
+  AmountRequired?: InputMaybe<Scalars['Decimal']>;
+  DateOfApplication?: InputMaybe<Scalars['LocalDate']>;
+  DateOfBirth?: InputMaybe<Scalars['LocalDate']>;
+  Email?: InputMaybe<Scalars['String']>;
+  FinanceProduct?: InputMaybe<FinanceProductInput>;
+  FinanceProductId?: InputMaybe<Scalars['UUID']>;
+  FinanceRequestId: Scalars['UUID'];
+  FinanceRequestLog?: InputMaybe<Array<FinanceRequestLogInput>>;
+  FinanceRequestStatus?: InputMaybe<FinanceRequestStatusInput>;
+  FinanceRequestStatusId?: InputMaybe<Scalars['UUID']>;
+  FirstName?: InputMaybe<Scalars['String']>;
+  LastName?: InputMaybe<Scalars['String']>;
+  Mobile?: InputMaybe<Scalars['String']>;
+  MonthlyRepayment?: InputMaybe<Scalars['Decimal']>;
+  ReferenceNo?: InputMaybe<Scalars['String']>;
+  Term?: InputMaybe<Scalars['Int']>;
+  Title?: InputMaybe<Scalars['String']>;
+  TotalRepayment?: InputMaybe<Scalars['Decimal']>;
+  _Deleted?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type FinanceRequestLog = {
+  __typename?: 'FinanceRequestLog';
+  Content?: Maybe<Scalars['String']>;
+  DateCreated?: Maybe<Scalars['Instant']>;
+  Description?: Maybe<Scalars['String']>;
+  FinanceRequest?: Maybe<FinanceRequest>;
+  FinanceRequestId?: Maybe<Scalars['UUID']>;
+  FinanceRequestLogId: Scalars['UUID'];
+  Title?: Maybe<Scalars['String']>;
+  _Deleted?: Maybe<Scalars['Boolean']>;
+};
+
+export type FinanceRequestLogCollectionSegment = {
+  __typename?: 'FinanceRequestLogCollectionSegment';
+  items?: Maybe<Array<FinanceRequestLog>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FinanceRequestLogFilterInput = {
+  Content?: InputMaybe<StringOperationFilterInput>;
+  DateCreated?: InputMaybe<ComparableNullableOfInstantOperationFilterInput>;
+  Description?: InputMaybe<StringOperationFilterInput>;
+  FinanceRequest?: InputMaybe<FinanceRequestFilterInput>;
+  FinanceRequestId?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  FinanceRequestLogId?: InputMaybe<ComparableGuidOperationFilterInput>;
+  Title?: InputMaybe<StringOperationFilterInput>;
+  _Deleted?: InputMaybe<BooleanOperationFilterInput>;
+  and?: InputMaybe<Array<FinanceRequestLogFilterInput>>;
+  or?: InputMaybe<Array<FinanceRequestLogFilterInput>>;
+};
+
+export type FinanceRequestLogInput = {
+  Content?: InputMaybe<Scalars['String']>;
+  DateCreated?: InputMaybe<Scalars['Instant']>;
+  Description?: InputMaybe<Scalars['String']>;
+  FinanceRequest?: InputMaybe<FinanceRequestInput>;
+  FinanceRequestId?: InputMaybe<Scalars['UUID']>;
+  FinanceRequestLogId: Scalars['UUID'];
+  Title?: InputMaybe<Scalars['String']>;
+  _Deleted?: InputMaybe<Scalars['Boolean']>;
+};
+
+export type FinanceRequestLogSortInput = {
+  Content?: InputMaybe<SortEnumType>;
+  DateCreated?: InputMaybe<SortEnumType>;
+  Description?: InputMaybe<SortEnumType>;
+  FinanceRequest?: InputMaybe<FinanceRequestSortInput>;
+  FinanceRequestId?: InputMaybe<SortEnumType>;
+  FinanceRequestLogId?: InputMaybe<SortEnumType>;
+  Title?: InputMaybe<SortEnumType>;
+  _Deleted?: InputMaybe<SortEnumType>;
+};
+
+export type FinanceRequestProxyInput = {
+  AmountRequired?: InputMaybe<Scalars['Decimal']>;
+  DateOfBirth?: InputMaybe<Scalars['LocalDate']>;
+  Email?: InputMaybe<Scalars['String']>;
+  FirstName?: InputMaybe<Scalars['String']>;
+  LastName?: InputMaybe<Scalars['String']>;
+  Mobile?: InputMaybe<Scalars['String']>;
+  Term?: InputMaybe<Scalars['Int']>;
+  Title?: InputMaybe<Scalars['String']>;
+};
+
+export type FinanceRequestSortInput = {
+  AmountRequired?: InputMaybe<SortEnumType>;
+  DateOfApplication?: InputMaybe<SortEnumType>;
+  DateOfBirth?: InputMaybe<SortEnumType>;
+  Email?: InputMaybe<SortEnumType>;
+  FinanceProduct?: InputMaybe<FinanceProductSortInput>;
+  FinanceProductId?: InputMaybe<SortEnumType>;
+  FinanceRequestId?: InputMaybe<SortEnumType>;
+  FinanceRequestStatus?: InputMaybe<FinanceRequestStatusSortInput>;
+  FinanceRequestStatusId?: InputMaybe<SortEnumType>;
+  FirstName?: InputMaybe<SortEnumType>;
+  LastName?: InputMaybe<SortEnumType>;
+  Mobile?: InputMaybe<SortEnumType>;
+  MonthlyRepayment?: InputMaybe<SortEnumType>;
+  ReferenceNo?: InputMaybe<SortEnumType>;
+  Term?: InputMaybe<SortEnumType>;
+  Title?: InputMaybe<SortEnumType>;
+  TotalRepayment?: InputMaybe<SortEnumType>;
+  _Deleted?: InputMaybe<SortEnumType>;
+};
+
+export type FinanceRequestStatus = {
+  __typename?: 'FinanceRequestStatus';
+  Description?: Maybe<Scalars['String']>;
+  FinanceRequest?: Maybe<Array<FinanceRequest>>;
+  FinanceRequestStatusId: Scalars['UUID'];
+  Title?: Maybe<Scalars['String']>;
+  _Deleted?: Maybe<Scalars['Boolean']>;
+  _case?: Maybe<Scalars['Int']>;
+};
+
+export type FinanceRequestStatusCollectionSegment = {
+  __typename?: 'FinanceRequestStatusCollectionSegment';
+  items?: Maybe<Array<FinanceRequestStatus>>;
+  /** Information to aid in pagination. */
+  pageInfo: CollectionSegmentInfo;
+  totalCount: Scalars['Int'];
+};
+
+export type FinanceRequestStatusFilterInput = {
+  Description?: InputMaybe<StringOperationFilterInput>;
+  FinanceRequest?: InputMaybe<ListFilterInputTypeOfFinanceRequestFilterInput>;
+  FinanceRequestStatusId?: InputMaybe<ComparableGuidOperationFilterInput>;
+  Title?: InputMaybe<StringOperationFilterInput>;
+  _Deleted?: InputMaybe<BooleanOperationFilterInput>;
+  _case?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
+  and?: InputMaybe<Array<FinanceRequestStatusFilterInput>>;
+  or?: InputMaybe<Array<FinanceRequestStatusFilterInput>>;
+};
+
+export type FinanceRequestStatusInput = {
+  Description?: InputMaybe<Scalars['String']>;
+  FinanceRequest?: InputMaybe<Array<FinanceRequestInput>>;
+  FinanceRequestStatusId: Scalars['UUID'];
+  Title?: InputMaybe<Scalars['String']>;
+  _Deleted?: InputMaybe<Scalars['Boolean']>;
+  _case?: InputMaybe<Scalars['Int']>;
+};
+
+export type FinanceRequestStatusSortInput = {
+  Description?: InputMaybe<SortEnumType>;
+  FinanceRequestStatusId?: InputMaybe<SortEnumType>;
+  Title?: InputMaybe<SortEnumType>;
+  _Deleted?: InputMaybe<SortEnumType>;
+  _case?: InputMaybe<SortEnumType>;
+};
+
+export type ListFilterInputTypeOfFinanceRequestFilterInput = {
+  all?: InputMaybe<FinanceRequestFilterInput>;
   any?: InputMaybe<Scalars['Boolean']>;
-  none?: InputMaybe<Finance_Request_LogFilterInput>;
-  some?: InputMaybe<Finance_Request_LogFilterInput>;
+  none?: InputMaybe<FinanceRequestFilterInput>;
+  some?: InputMaybe<FinanceRequestFilterInput>;
+};
+
+export type ListFilterInputTypeOfFinanceRequestLogFilterInput = {
+  all?: InputMaybe<FinanceRequestLogFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']>;
+  none?: InputMaybe<FinanceRequestLogFilterInput>;
+  some?: InputMaybe<FinanceRequestLogFilterInput>;
 };
 
 export type Mutation = {
   __typename?: 'Mutation';
-  addFinanceRequest: Response;
-  updateFinanceRequest: Response;
-  upsertFinanceProducts: Response;
-  upsertFinanceRequestStatuses: Response;
+  AddFinanceRequest: Response;
+  ApplyFinanceRequest: Response;
+  UpdateFinanceRequest: Response;
+  UpsertFinanceProducts: Response;
+  UpsertFinanceRequestStatuses: Response;
 };
 
 
 export type MutationAddFinanceRequestArgs = {
-  input: Finance_RequestInput;
+  input: FinanceRequestProxyInput;
+};
+
+
+export type MutationApplyFinanceRequestArgs = {
+  edit: FinanceRequestInput;
 };
 
 
 export type MutationUpdateFinanceRequestArgs = {
-  edit: Finance_RequestInput;
+  edit: FinanceRequestInput;
 };
 
 
 export type MutationUpsertFinanceProductsArgs = {
-  input: Array<Finance_ProductInput>;
+  input: Array<FinanceProductInput>;
 };
 
 
 export type MutationUpsertFinanceRequestStatusesArgs = {
-  input: Array<Finance_Request_StatusInput>;
+  input: Array<FinanceRequestStatusInput>;
 };
 
 export type Query = {
   __typename?: 'Query';
-  financeProducts: Array<Finance_Product>;
-  financeProductsPaginated?: Maybe<Finance_ProductCollectionSegment>;
-  financeRequestLogs: Array<Finance_Request_Log>;
-  financeRequestLogsPaginated?: Maybe<Finance_Request_LogCollectionSegment>;
-  financeRequestStatuses: Array<Finance_Request_Status>;
-  financeRequestStatusesPagnated?: Maybe<Finance_Request_StatusCollectionSegment>;
-  financeRequests: Array<Finance_Request>;
-  financeRequestsPaginated?: Maybe<Finance_RequestCollectionSegment>;
+  FinanceProducts: Array<FinanceProduct>;
+  FinanceProductsPaginated?: Maybe<FinanceProductCollectionSegment>;
+  FinanceRequestLogs: Array<FinanceRequestLog>;
+  FinanceRequestLogsPaginated?: Maybe<FinanceRequestLogCollectionSegment>;
+  FinanceRequestStatuses: Array<FinanceRequestStatus>;
+  FinanceRequestStatusesPagnated?: Maybe<FinanceRequestStatusCollectionSegment>;
+  FinanceRequests: Array<FinanceRequest>;
+  FinanceRequestsPaginated?: Maybe<FinanceRequestCollectionSegment>;
 };
 
 
 export type QueryFinanceProductsArgs = {
-  order?: InputMaybe<Array<Finance_ProductSortInput>>;
-  where?: InputMaybe<Finance_ProductFilterInput>;
+  order?: InputMaybe<Array<FinanceProductSortInput>>;
+  where?: InputMaybe<FinanceProductFilterInput>;
 };
 
 
 export type QueryFinanceProductsPaginatedArgs = {
-  order?: InputMaybe<Array<Finance_ProductSortInput>>;
+  order?: InputMaybe<Array<FinanceProductSortInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Finance_ProductFilterInput>;
+  where?: InputMaybe<FinanceProductFilterInput>;
 };
 
 
 export type QueryFinanceRequestLogsArgs = {
-  order?: InputMaybe<Array<Finance_Request_LogSortInput>>;
-  where?: InputMaybe<Finance_Request_LogFilterInput>;
+  order?: InputMaybe<Array<FinanceRequestLogSortInput>>;
+  where?: InputMaybe<FinanceRequestLogFilterInput>;
 };
 
 
 export type QueryFinanceRequestLogsPaginatedArgs = {
-  order?: InputMaybe<Array<Finance_Request_LogSortInput>>;
+  order?: InputMaybe<Array<FinanceRequestLogSortInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Finance_Request_LogFilterInput>;
+  where?: InputMaybe<FinanceRequestLogFilterInput>;
 };
 
 
 export type QueryFinanceRequestStatusesArgs = {
-  order?: InputMaybe<Array<Finance_Request_StatusSortInput>>;
-  where?: InputMaybe<Finance_Request_StatusFilterInput>;
+  order?: InputMaybe<Array<FinanceRequestStatusSortInput>>;
+  where?: InputMaybe<FinanceRequestStatusFilterInput>;
 };
 
 
 export type QueryFinanceRequestStatusesPagnatedArgs = {
-  order?: InputMaybe<Array<Finance_Request_StatusSortInput>>;
+  order?: InputMaybe<Array<FinanceRequestStatusSortInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Finance_Request_StatusFilterInput>;
+  where?: InputMaybe<FinanceRequestStatusFilterInput>;
 };
 
 
 export type QueryFinanceRequestsArgs = {
-  order?: InputMaybe<Array<Finance_RequestSortInput>>;
-  where?: InputMaybe<Finance_RequestFilterInput>;
+  order?: InputMaybe<Array<FinanceRequestSortInput>>;
+  where?: InputMaybe<FinanceRequestFilterInput>;
 };
 
 
 export type QueryFinanceRequestsPaginatedArgs = {
-  order?: InputMaybe<Array<Finance_RequestSortInput>>;
+  order?: InputMaybe<Array<FinanceRequestSortInput>>;
   skip?: InputMaybe<Scalars['Int']>;
   take?: InputMaybe<Scalars['Int']>;
-  where?: InputMaybe<Finance_RequestFilterInput>;
+  where?: InputMaybe<FinanceRequestFilterInput>;
 };
 
 export type Response = {
   __typename?: 'Response';
-  responseCode: Scalars['Int'];
-  responseLabel?: Maybe<Scalars['String']>;
-  responseMessage?: Maybe<Scalars['String']>;
+  ResponseCode: Scalars['Int'];
+  ResponseLabel?: Maybe<Scalars['String']>;
+  ResponseMessage?: Maybe<Scalars['String']>;
 };
 
 export enum SortEnumType {
@@ -263,233 +542,4 @@ export type StringOperationFilterInput = {
   nstartsWith?: InputMaybe<Scalars['String']>;
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']>;
-};
-
-export type Finance_Product = {
-  __typename?: 'finance_product';
-  amount_min?: Maybe<Scalars['Decimal']>;
-  description?: Maybe<Scalars['String']>;
-  finance_product_id: Scalars['UUID'];
-  finance_request: Array<Finance_Request>;
-  interest_rate?: Maybe<Scalars['Decimal']>;
-  term_min?: Maybe<Scalars['Int']>;
-  title?: Maybe<Scalars['String']>;
-};
-
-export type Finance_ProductCollectionSegment = {
-  __typename?: 'finance_productCollectionSegment';
-  items?: Maybe<Array<Finance_Product>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Finance_ProductFilterInput = {
-  amount_min?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
-  and?: InputMaybe<Array<Finance_ProductFilterInput>>;
-  description?: InputMaybe<StringOperationFilterInput>;
-  finance_product_id?: InputMaybe<ComparableGuidOperationFilterInput>;
-  finance_request?: InputMaybe<ListFilterInputTypeOffinance_RequestFilterInput>;
-  interest_rate?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
-  or?: InputMaybe<Array<Finance_ProductFilterInput>>;
-  term_min?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
-  title?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type Finance_ProductInput = {
-  amount_min?: InputMaybe<Scalars['Decimal']>;
-  description?: InputMaybe<Scalars['String']>;
-  finance_product_id: Scalars['UUID'];
-  finance_request: Array<Finance_RequestInput>;
-  interest_rate?: InputMaybe<Scalars['Decimal']>;
-  term_min?: InputMaybe<Scalars['Int']>;
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type Finance_ProductSortInput = {
-  amount_min?: InputMaybe<SortEnumType>;
-  description?: InputMaybe<SortEnumType>;
-  finance_product_id?: InputMaybe<SortEnumType>;
-  interest_rate?: InputMaybe<SortEnumType>;
-  term_min?: InputMaybe<SortEnumType>;
-  title?: InputMaybe<SortEnumType>;
-};
-
-export type Finance_Request = {
-  __typename?: 'finance_request';
-  amountRequired?: Maybe<Scalars['Decimal']>;
-  dateOfBirth?: Maybe<Scalars['LocalDate']>;
-  email?: Maybe<Scalars['String']>;
-  finance_product?: Maybe<Finance_Product>;
-  finance_product_id?: Maybe<Scalars['UUID']>;
-  finance_request_id: Scalars['UUID'];
-  finance_request_log: Array<Finance_Request_Log>;
-  finance_request_status?: Maybe<Finance_Request_Status>;
-  finance_request_status_id?: Maybe<Scalars['UUID']>;
-  firstName?: Maybe<Scalars['String']>;
-  lastName?: Maybe<Scalars['String']>;
-  mobile?: Maybe<Scalars['String']>;
-  referenceNo?: Maybe<Scalars['String']>;
-  term?: Maybe<Scalars['Int']>;
-  title?: Maybe<Scalars['String']>;
-};
-
-export type Finance_RequestCollectionSegment = {
-  __typename?: 'finance_requestCollectionSegment';
-  items?: Maybe<Array<Finance_Request>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Finance_RequestFilterInput = {
-  amountRequired?: InputMaybe<ComparableNullableOfDecimalOperationFilterInput>;
-  and?: InputMaybe<Array<Finance_RequestFilterInput>>;
-  dateOfBirth?: InputMaybe<ComparableNullableOfLocalDateOperationFilterInput>;
-  email?: InputMaybe<StringOperationFilterInput>;
-  finance_product?: InputMaybe<Finance_ProductFilterInput>;
-  finance_product_id?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
-  finance_request_id?: InputMaybe<ComparableGuidOperationFilterInput>;
-  finance_request_log?: InputMaybe<ListFilterInputTypeOffinance_Request_LogFilterInput>;
-  finance_request_status?: InputMaybe<Finance_Request_StatusFilterInput>;
-  finance_request_status_id?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
-  firstName?: InputMaybe<StringOperationFilterInput>;
-  lastName?: InputMaybe<StringOperationFilterInput>;
-  mobile?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<Finance_RequestFilterInput>>;
-  referenceNo?: InputMaybe<StringOperationFilterInput>;
-  term?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
-  title?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type Finance_RequestInput = {
-  amountRequired?: InputMaybe<Scalars['Decimal']>;
-  dateOfBirth?: InputMaybe<Scalars['LocalDate']>;
-  email?: InputMaybe<Scalars['String']>;
-  finance_product?: InputMaybe<Finance_ProductInput>;
-  finance_product_id?: InputMaybe<Scalars['UUID']>;
-  finance_request_id: Scalars['UUID'];
-  finance_request_log: Array<Finance_Request_LogInput>;
-  finance_request_status?: InputMaybe<Finance_Request_StatusInput>;
-  finance_request_status_id?: InputMaybe<Scalars['UUID']>;
-  firstName?: InputMaybe<Scalars['String']>;
-  lastName?: InputMaybe<Scalars['String']>;
-  mobile?: InputMaybe<Scalars['String']>;
-  referenceNo?: InputMaybe<Scalars['String']>;
-  term?: InputMaybe<Scalars['Int']>;
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type Finance_RequestSortInput = {
-  amountRequired?: InputMaybe<SortEnumType>;
-  dateOfBirth?: InputMaybe<SortEnumType>;
-  email?: InputMaybe<SortEnumType>;
-  finance_product?: InputMaybe<Finance_ProductSortInput>;
-  finance_product_id?: InputMaybe<SortEnumType>;
-  finance_request_id?: InputMaybe<SortEnumType>;
-  finance_request_status?: InputMaybe<Finance_Request_StatusSortInput>;
-  finance_request_status_id?: InputMaybe<SortEnumType>;
-  firstName?: InputMaybe<SortEnumType>;
-  lastName?: InputMaybe<SortEnumType>;
-  mobile?: InputMaybe<SortEnumType>;
-  referenceNo?: InputMaybe<SortEnumType>;
-  term?: InputMaybe<SortEnumType>;
-  title?: InputMaybe<SortEnumType>;
-};
-
-export type Finance_Request_Log = {
-  __typename?: 'finance_request_log';
-  _case?: Maybe<Scalars['Int']>;
-  content?: Maybe<Scalars['String']>;
-  date_created?: Maybe<Scalars['Instant']>;
-  description?: Maybe<Scalars['String']>;
-  finance_request?: Maybe<Finance_Request>;
-  finance_request_id?: Maybe<Scalars['UUID']>;
-  finance_request_log_id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-};
-
-export type Finance_Request_LogCollectionSegment = {
-  __typename?: 'finance_request_logCollectionSegment';
-  items?: Maybe<Array<Finance_Request_Log>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Finance_Request_LogFilterInput = {
-  _case?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
-  and?: InputMaybe<Array<Finance_Request_LogFilterInput>>;
-  content?: InputMaybe<StringOperationFilterInput>;
-  date_created?: InputMaybe<ComparableNullableOfInstantOperationFilterInput>;
-  description?: InputMaybe<StringOperationFilterInput>;
-  finance_request?: InputMaybe<Finance_RequestFilterInput>;
-  finance_request_id?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
-  finance_request_log_id?: InputMaybe<ComparableGuidOperationFilterInput>;
-  or?: InputMaybe<Array<Finance_Request_LogFilterInput>>;
-  title?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type Finance_Request_LogInput = {
-  _case?: InputMaybe<Scalars['Int']>;
-  content?: InputMaybe<Scalars['String']>;
-  date_created?: InputMaybe<Scalars['Instant']>;
-  description?: InputMaybe<Scalars['String']>;
-  finance_request?: InputMaybe<Finance_RequestInput>;
-  finance_request_id?: InputMaybe<Scalars['UUID']>;
-  finance_request_log_id: Scalars['UUID'];
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type Finance_Request_LogSortInput = {
-  _case?: InputMaybe<SortEnumType>;
-  content?: InputMaybe<SortEnumType>;
-  date_created?: InputMaybe<SortEnumType>;
-  description?: InputMaybe<SortEnumType>;
-  finance_request?: InputMaybe<Finance_RequestSortInput>;
-  finance_request_id?: InputMaybe<SortEnumType>;
-  finance_request_log_id?: InputMaybe<SortEnumType>;
-  title?: InputMaybe<SortEnumType>;
-};
-
-export type Finance_Request_Status = {
-  __typename?: 'finance_request_status';
-  _case?: Maybe<Scalars['Int']>;
-  description?: Maybe<Scalars['String']>;
-  finance_request: Array<Finance_Request>;
-  finance_request_status_id: Scalars['UUID'];
-  title?: Maybe<Scalars['String']>;
-};
-
-export type Finance_Request_StatusCollectionSegment = {
-  __typename?: 'finance_request_statusCollectionSegment';
-  items?: Maybe<Array<Finance_Request_Status>>;
-  /** Information to aid in pagination. */
-  pageInfo: CollectionSegmentInfo;
-  totalCount: Scalars['Int'];
-};
-
-export type Finance_Request_StatusFilterInput = {
-  _case?: InputMaybe<ComparableNullableOfInt32OperationFilterInput>;
-  and?: InputMaybe<Array<Finance_Request_StatusFilterInput>>;
-  description?: InputMaybe<StringOperationFilterInput>;
-  finance_request?: InputMaybe<ListFilterInputTypeOffinance_RequestFilterInput>;
-  finance_request_status_id?: InputMaybe<ComparableGuidOperationFilterInput>;
-  or?: InputMaybe<Array<Finance_Request_StatusFilterInput>>;
-  title?: InputMaybe<StringOperationFilterInput>;
-};
-
-export type Finance_Request_StatusInput = {
-  _case?: InputMaybe<Scalars['Int']>;
-  description?: InputMaybe<Scalars['String']>;
-  finance_request: Array<Finance_RequestInput>;
-  finance_request_status_id: Scalars['UUID'];
-  title?: InputMaybe<Scalars['String']>;
-};
-
-export type Finance_Request_StatusSortInput = {
-  _case?: InputMaybe<SortEnumType>;
-  description?: InputMaybe<SortEnumType>;
-  finance_request_status_id?: InputMaybe<SortEnumType>;
-  title?: InputMaybe<SortEnumType>;
 };

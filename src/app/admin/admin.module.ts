@@ -46,13 +46,20 @@ import {InputSwitchModule} from "primeng/inputswitch";
 import {FinanceRequestOverviewComponent} from "./finance-request-overview/finance-request-overview.component";
 import {ConfirmationService} from "primeng/api";
 import { FinanceSettingsComponent } from './finance-settings/finance-settings.component';
+import { FinanceRequestViewerComponent } from './finance-request-viewer/finance-request-viewer.component';
+import { FinanceRequestCalculatorComponent } from './finance-request-calculator/finance-request-calculator.component';
+import { FinanceRequestQuotationComponent } from './finance-request-quotation/finance-request-quotation.component';
+import {SliderModule} from "primeng/slider";
 
 
 @NgModule({
   declarations: [
     AdminComponent,
     FinanceRequestOverviewComponent,
-    FinanceSettingsComponent
+    FinanceSettingsComponent,
+    FinanceRequestViewerComponent,
+    FinanceRequestCalculatorComponent,
+    FinanceRequestQuotationComponent
   ],
     imports: [
         CommonModule,
@@ -101,6 +108,7 @@ import { FinanceSettingsComponent } from './finance-settings/finance-settings.co
         StyleClassModule,
         CardModule,
         InputSwitchModule,
+        SliderModule,
     ],
   providers: [ConfirmationService],
 })

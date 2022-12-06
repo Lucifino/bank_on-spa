@@ -1,0 +1,85 @@
+<p>finance-request-calculator works!</p>
+<p-fieldset [formGroup]="calculateFinanceRequestForm" legend="Pullout Form" styleClass="flex flex-column mx-4">
+  <div class="flex flex-column gap-3">
+    <div class="grid">
+      <div class="col-12 lg:col-2 flex-column w-full">
+        <label class="flex">Title</label>
+        <p-dropdown [options]="titleDropdown"
+                    formControlName="Title"
+                    appendTo="body"
+                    optionLabel="label"
+                    optionValue="code"
+                    [filter]="true"
+                    placeholder="Choose Title"
+                    [showClear]="true"
+        >
+
+        </p-dropdown>
+      </div>
+      <div class="col-12 lg:col-4 flex-column w-full">
+        <label class="flex">Firstname</label>
+        <input class="flex w-full" pInputText formControlName="FirstName" type="text" >
+      </div>
+      <div class="col-12 lg:col-4 flex-column w-full">
+        <label class="flex">Lastname</label>
+        <input class="flex w-full" formControlName="LastName" pInputText type="text" >
+      </div>
+    </div>
+
+
+    <div class="grid">
+      <div class="col-12 lg:col-4 flex-column">
+        <label class="flex">Date Of Birth</label>
+        <p-calendar
+          formControlName="DateOfBirth"
+          hourFormat="12"
+          appendTo="body"
+        ></p-calendar>
+      </div>
+      <div class="col-12 lg:col-4 flex-column">
+        <label class="flex">Mobile No</label>
+        <input pInputText formControlName="Mobile" />
+      </div>
+      <div class="col-12 lg:col-4 flex-column">
+        <label class="flex">Email</label>
+        <input pInputText formControlName="Email" />
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="col-12 lg:col-4 flex-column">
+        <label class="flex">Product</label>
+        <p-dropdown [options]="financeProductsDropdown"
+                    formControlName="FinanceProductId"
+                    appendTo="body"
+                    optionLabel="Title"
+                    optionValue="FinanceProductId"
+                    [filter]="true"
+                    placeholder="Choose Product"
+                    [showClear]="true"
+        >
+
+        </p-dropdown>
+      </div>
+      <div class="col-12 lg:col-6 flex-column">
+        <label class="flex">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired}}</label>
+        <p-slider formControlName="AmountRequired" [min]="0" [max]="1000000"></p-slider>
+      </div>
+      <div class="col-12 lg:col-42 flex-column">
+        <label class="flex">Terms (# Of Months): {{calculateFinanceRequestForm.value.Term}}</label>
+        <p-slider formControlName="Term" [min]="0" [max]="36"></p-slider>
+
+      </div>
+    </div>
+  </div>
+
+  <p-confirmDialog appendTo="body" ></p-confirmDialog>
+
+
+</p-fieldset>
+<div class="w-full">
+  <div class="flex mx-4 justify-content-end mt-4">
+    <p-button label="Submit" [disabled]="calculateFinanceRequestForm.invalid" (onClick)="editFinanceRequest()"></p-button>
+  </div>
+</div>
+
