@@ -36,8 +36,6 @@ import {MenubarModule} from "primeng/menubar";
 import {CarouselModule} from "primeng/carousel";
 import {TimelineModule} from "primeng/timeline";
 import {MenuModule} from "primeng/menu";
-import {PdfViewerModule} from "ng2-pdf-viewer";
-import {GoogleMapsModule} from "@angular/google-maps";
 import {GMapModule} from "primeng/gmap";
 import {ToastModule} from "primeng/toast";
 import {StyleClassModule} from "primeng/styleclass";
@@ -102,8 +100,6 @@ import {SliderModule} from "primeng/slider";
         TabViewModule,
         MenuModule,
         GMapModule,
-        GoogleMapsModule,
-        PdfViewerModule,
         ToastModule,
         StyleClassModule,
         CardModule,
