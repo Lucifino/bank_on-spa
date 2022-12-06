@@ -23,14 +23,20 @@ directive @stream(
   label: String
 ) on FIELD
 
-directive @authorize(
-  "Defines when when the resolver shall be executed.By default the resolver is executed after the policy has determined that the current user is allowed to access the field."
-  Apply: ApplyPolicy! = BEFORE_RESOLVER,
-  "The name of the authorization policy that determines access to the annotated resource."
-  Policy: String,
-  "Roles that are allowed to access the annotated resource."
-  Roles: [String!]
-) on SCHEMA | OBJECT | FIELD_DEFINITION
+type BlackListGroup {
+  BlackListGroupId: UUID!
+  Expression: String
+  Title: String
+  _Deleted: Boolean
+  _case: Int
+}
+
+type BlackListGroupCollectionSegment {
+  items: [BlackListGroup!]
+  "Information to aid in pagination."
+  pageInfo: CollectionSegmentInfo!
+  totalCount: Int!
+}
 
 "Information about the offset pagination."
 type CollectionSegmentInfo {
@@ -43,8 +49,9 @@ type CollectionSegmentInfo {
 type FinanceProduct {
   AmountMin: Decimal
   Description: String
+  EstablishmentRate: Decimal
   FinanceProductId: UUID!
-  FinanceRequest: [FinanceRequest!]
+  FinanceRequest: [FinanceRequest!]!
   InterestRate: Decimal
   MonthsFree: Int
   TermMin: Int
@@ -67,7 +74,7 @@ type FinanceRequest {
   FinanceProduct: FinanceProduct
   FinanceProductId: UUID
   FinanceRequestId: UUID!
-  FinanceRequestLog: [FinanceRequestLog!]
+  FinanceRequestLog: [FinanceRequestLog!]!
   FinanceRequestStatus: FinanceRequestStatus
   FinanceRequestStatusId: UUID
   FirstName: String
@@ -78,7 +85,10 @@ type FinanceRequest {
   Term: Int
   Title: String
   TotalRepayment: Decimal
+  _BlackListDomainFlag: Boolean
+  _BlackListMobileFlag: Boolean
   _Deleted: Boolean
+  _UnderAgeFlag: Boolean
 }
 
 type FinanceRequestCollectionSegment {
@@ -108,7 +118,7 @@ type FinanceRequestLogCollectionSegment {
 
 type FinanceRequestStatus {
   Description: String
-  FinanceRequest: [FinanceRequest!]
+  FinanceRequest: [FinanceRequest!]!
   FinanceRequestStatusId: UUID!
   Title: String
   _Deleted: Boolean
@@ -125,12 +135,16 @@ type FinanceRequestStatusCollectionSegment {
 type Mutation {
   AddFinanceRequest(input: FinanceRequestProxyInput!): Response!
   ApplyFinanceRequest(edit: FinanceRequestInput!): Response!
-  UpdateFinanceRequest(edit: FinanceRequestInput!): Response!
+  UpdateFinanceRequestAdmin(edit: FinanceRequestInput!): Response!
+  UpdateFinanceRequestCustomer(edit: FinanceRequestInput!): Response!
+  UpsertBlackListGroup(input: [BlackListGroupInput!]!): Response!
   UpsertFinanceProducts(input: [FinanceProductInput!]!): Response!
   UpsertFinanceRequestStatuses(input: [FinanceRequestStatusInput!]!): Response!
 }
 
 type Query {
+  BlackListGroups(order: [BlackListGroupSortInput!], where: BlackListGroupFilterInput): [BlackListGroup!]!
+  BlackListGroupsPaginated(order: [BlackListGroupSortInput!], skip: Int, take: Int, where: BlackListGroupFilterInput): BlackListGroupCollectionSegment
   FinanceProducts(order: [FinanceProductSortInput!], where: FinanceProductFilterInput): [FinanceProduct!]!
   FinanceProductsPaginated(order: [FinanceProductSortInput!], skip: Int, take: Int, where: FinanceProductFilterInput): FinanceProductCollectionSegment
   FinanceRequestLogs(order: [FinanceRequestLogSortInput!], where: FinanceRequestLogFilterInput): [FinanceRequestLog!]!
@@ -145,11 +159,6 @@ type Response {
   ResponseCode: Int!
   ResponseLabel: String
   ResponseMessage: String
-}
-
-enum ApplyPolicy {
-  AFTER_RESOLVER
-  BEFORE_RESOLVER
 }
 
 enum SortEnumType {
@@ -173,6 +182,32 @@ scalar UUID
 
 "The `Upload` scalar type represents a file upload."
 scalar Upload
+
+input BlackListGroupFilterInput {
+  BlackListGroupId: ComparableGuidOperationFilterInput
+  Expression: StringOperationFilterInput
+  Title: StringOperationFilterInput
+  _Deleted: BooleanOperationFilterInput
+  _case: ComparableNullableOfInt32OperationFilterInput
+  and: [BlackListGroupFilterInput!]
+  or: [BlackListGroupFilterInput!]
+}
+
+input BlackListGroupInput {
+  BlackListGroupId: UUID!
+  Expression: String
+  Title: String
+  _Deleted: Boolean
+  _case: Int
+}
+
+input BlackListGroupSortInput {
+  BlackListGroupId: SortEnumType
+  Expression: SortEnumType
+  Title: SortEnumType
+  _Deleted: SortEnumType
+  _case: SortEnumType
+}
 
 input BooleanOperationFilterInput {
   eq: Boolean
@@ -272,6 +307,7 @@ input ComparableNullableOfLocalDateOperationFilterInput {
 input FinanceProductFilterInput {
   AmountMin: ComparableNullableOfDecimalOperationFilterInput
   Description: StringOperationFilterInput
+  EstablishmentRate: ComparableNullableOfDecimalOperationFilterInput
   FinanceProductId: ComparableGuidOperationFilterInput
   FinanceRequest: ListFilterInputTypeOfFinanceRequestFilterInput
   InterestRate: ComparableNullableOfDecimalOperationFilterInput
@@ -286,8 +322,9 @@ input FinanceProductFilterInput {
 input FinanceProductInput {
   AmountMin: Decimal
   Description: String
+  EstablishmentRate: Decimal
   FinanceProductId: UUID!
-  FinanceRequest: [FinanceRequestInput!]
+  FinanceRequest: [FinanceRequestInput!]!
   InterestRate: Decimal
   MonthsFree: Int
   TermMin: Int
@@ -298,6 +335,7 @@ input FinanceProductInput {
 input FinanceProductSortInput {
   AmountMin: SortEnumType
   Description: SortEnumType
+  EstablishmentRate: SortEnumType
   FinanceProductId: SortEnumType
   InterestRate: SortEnumType
   MonthsFree: SortEnumType
@@ -325,7 +363,10 @@ input FinanceRequestFilterInput {
   Term: ComparableNullableOfInt32OperationFilterInput
   Title: StringOperationFilterInput
   TotalRepayment: ComparableNullableOfDecimalOperationFilterInput
+  _BlackListDomainFlag: BooleanOperationFilterInput
+  _BlackListMobileFlag: BooleanOperationFilterInput
   _Deleted: BooleanOperationFilterInput
+  _UnderAgeFlag: BooleanOperationFilterInput
   and: [FinanceRequestFilterInput!]
   or: [FinanceRequestFilterInput!]
 }
@@ -338,7 +379,7 @@ input FinanceRequestInput {
   FinanceProduct: FinanceProductInput
   FinanceProductId: UUID
   FinanceRequestId: UUID!
-  FinanceRequestLog: [FinanceRequestLogInput!]
+  FinanceRequestLog: [FinanceRequestLogInput!]!
   FinanceRequestStatus: FinanceRequestStatusInput
   FinanceRequestStatusId: UUID
   FirstName: String
@@ -349,7 +390,10 @@ input FinanceRequestInput {
   Term: Int
   Title: String
   TotalRepayment: Decimal
+  _BlackListDomainFlag: Boolean
+  _BlackListMobileFlag: Boolean
   _Deleted: Boolean
+  _UnderAgeFlag: Boolean
 }
 
 input FinanceRequestLogFilterInput {
@@ -416,7 +460,10 @@ input FinanceRequestSortInput {
   Term: SortEnumType
   Title: SortEnumType
   TotalRepayment: SortEnumType
+  _BlackListDomainFlag: SortEnumType
+  _BlackListMobileFlag: SortEnumType
   _Deleted: SortEnumType
+  _UnderAgeFlag: SortEnumType
 }
 
 input FinanceRequestStatusFilterInput {
@@ -432,7 +479,7 @@ input FinanceRequestStatusFilterInput {
 
 input FinanceRequestStatusInput {
   Description: String
-  FinanceRequest: [FinanceRequestInput!]
+  FinanceRequest: [FinanceRequestInput!]!
   FinanceRequestStatusId: UUID!
   Title: String
   _Deleted: Boolean

@@ -1,0 +1,60 @@
+.history-box {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+
+
+::ng-deep {
+  //.p-sidebar-right {
+  //  width: 30vw !important;
+  //}
+
+  .log-timeline {
+    .p-timeline-event {
+      .p-timeline-event-opposite {
+        display: none !important;
+      }
+
+      .log-info {
+        border: 2px solid var(--surface-me);
+        border-radius: 0.375rem;
+      }
+    }
+  }
+
+  .p-datatable .p-datatable-tbody > tr > td:only-child {
+    border: 0 !important;
+  }
+
+  @media only screen and (max-width: 768px) {
+    .card {
+      border-radius: 0.5rem !important;
+    }
+
+    #task-table {
+      td:nth-child(2), td:nth-child(4), td:nth-child(5) {
+        display: none !important;
+      }
+      td:nth-child(3) {
+        color: var(--surface-500) !important;
+      }
+      tr:not(:nth-child(1) :last-child) {
+        border-bottom: 1px solid #e9ecef !important;
+      }
+      tr, td:nth-child(1) {
+        line-height: 0;
+      }
+    }
+
+    .history-box {
+      border-radius: 0 0 0.5rem 0.5rem !important;
+      box-shadow: 0 0 #0000, 0 0 #0000, 0 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+    }
+
+    .historySideBar {
+      .p-sidebar-bottom {
+        height: 90vh;
+      }
+    }
+
+  }
+}

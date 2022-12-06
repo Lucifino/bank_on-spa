@@ -189,7 +189,7 @@ export class FinanceRequestOverviewComponent implements OnInit {
   checkFinanceRequest(event:any)
   {
     console.log(event)
-    this.router.navigate([`admin/calculate/${event.data.FinanceRequestId}`]);
+    this.router.navigate([`admin/viewer/${event.data.FinanceRequestId}`]);
   }
 
   addFinanceRequest()
@@ -211,14 +211,14 @@ export class FinanceRequestOverviewComponent implements OnInit {
     }).subscribe(m => {
       console.log(m)
 
-      if(m.data?.AddFinanceRequest.ResponseCode === 200) {
+      if(m.data?.AddFinanceRequest.ResponseCode === 202) {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
           message: m.data?.AddFinanceRequest.ResponseMessage ?? '',
           acceptLabel: 'Continue',
           accept: () => {
-            this.router.navigate([`calculate/${m.data?.AddFinanceRequest.ResponseMessage}`]);
+            this.router.navigate([`admin/calculate/${m.data?.AddFinanceRequest.ResponseMessage}`]);
           }
         })
       };

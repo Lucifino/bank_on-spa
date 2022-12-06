@@ -68,7 +68,7 @@
             <td>{{request.ReferenceNo}}</td>
             <td>{{request.Title}} {{request.FirstName}} {{request.LastName}}</td>
             <td>{{request.AmountRequired}}</td>
-            <td>{{request.FinanceProductId?.Title? request.FinanceProductId?.Title: "Not Set"}}</td>
+            <td>{{request.FinanceProduct?.Title? request.FinanceProduct?.Title: "Not Set"}}</td>
             <td>{{request.DateOfApplication | date: 'mediumDate'}}</td>
             <td>{{request.FinanceRequestStatus?.Title}}</td>
           </tr>

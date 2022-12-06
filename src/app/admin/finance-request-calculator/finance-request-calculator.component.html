@@ -1,85 +1,150 @@
-<p>finance-request-calculator works!</p>
-<p-fieldset [formGroup]="calculateFinanceRequestForm" legend="Pullout Form" styleClass="flex flex-column mx-4">
-  <div class="flex flex-column gap-3">
-    <div class="grid">
-      <div class="col-12 lg:col-2 flex-column w-full">
-        <label class="flex">Title</label>
-        <p-dropdown [options]="titleDropdown"
-                    formControlName="Title"
-                    appendTo="body"
-                    optionLabel="label"
-                    optionValue="code"
-                    [filter]="true"
-                    placeholder="Choose Title"
-                    [showClear]="true"
-        >
 
-        </p-dropdown>
-      </div>
-      <div class="col-12 lg:col-4 flex-column w-full">
-        <label class="flex">Firstname</label>
-        <input class="flex w-full" pInputText formControlName="FirstName" type="text" >
-      </div>
-      <div class="col-12 lg:col-4 flex-column w-full">
-        <label class="flex">Lastname</label>
-        <input class="flex w-full" formControlName="LastName" pInputText type="text" >
-      </div>
-    </div>
+<div class="flex my-5 align-items-stretch"  fxLayoutGap="1rem" fxLayout.xs="column">
+
+  <div class="surface-card shadow-1 p-4 w-full min-w-0 h-full border-round"
+       fxFlex
+       fxFlex.gt-md="60">
+    <p-fieldset [formGroup]="calculateFinanceRequestForm" legend="Finance Request Form" styleClass="flex flex-column mx-4">
+      <div class="flex flex-column gap-3">
+        <div class="grid justify-content-between">
+          <div class="col-12 lg:col-4 flex-column ">
+            <label class="flex">Title</label>
+            <p-dropdown [options]="titleDropdown"
+                        formControlName="Title"
+                        appendTo="body"
+                        optionLabel="label"
+                        optionValue="code"
+                        [filter]="true"
+                        placeholder="Choose Title"
+                        [showClear]="true"
+            >
+
+            </p-dropdown>
+          </div>
+          <div class="col-12 lg:col-4 flex-column">
+            <label class="flex">Firstname</label>
+            <input class="flex w-full" pInputText formControlName="FirstName" type="text" >
+          </div>
+          <div class="col-12 lg:col-4 flex-column ">
+            <label class="flex">Lastname</label>
+            <input class="flex w-full" formControlName="LastName" pInputText type="text" >
+          </div>
+        </div>
 
 
-    <div class="grid">
-      <div class="col-12 lg:col-4 flex-column">
-        <label class="flex">Date Of Birth</label>
-        <p-calendar
-          formControlName="DateOfBirth"
-          hourFormat="12"
-          appendTo="body"
-        ></p-calendar>
-      </div>
-      <div class="col-12 lg:col-4 flex-column">
-        <label class="flex">Mobile No</label>
-        <input pInputText formControlName="Mobile" />
-      </div>
-      <div class="col-12 lg:col-4 flex-column">
-        <label class="flex">Email</label>
-        <input pInputText formControlName="Email" />
-      </div>
-    </div>
+        <div class="grid justify-content-between">
+          <div class="col-12 lg:col-3 flex-column">
+            <label class="flex">Mobile No</label>
+            <input pInputText formControlName="Mobile" />
+          </div>
+          <div class="col-12 lg:col-3 flex-column">
+            <label class="flex">Email</label>
+            <input pInputText formControlName="Email" />
+          </div>
 
-    <div class="grid">
-      <div class="col-12 lg:col-4 flex-column">
-        <label class="flex">Product</label>
-        <p-dropdown [options]="financeProductsDropdown"
-                    formControlName="FinanceProductId"
-                    appendTo="body"
-                    optionLabel="Title"
-                    optionValue="FinanceProductId"
-                    [filter]="true"
-                    placeholder="Choose Product"
-                    [showClear]="true"
-        >
+          <div class="col-12 lg:col-3 flex-column">
+            <label class="flex">Date Of Birth</label>
+            <p-calendar
+              formControlName="DateOfBirth"
+              hourFormat="12"
+              appendTo="body"
+            ></p-calendar>
+          </div>
+        </div>
 
-        </p-dropdown>
-      </div>
-      <div class="col-12 lg:col-6 flex-column">
-        <label class="flex">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired}}</label>
-        <p-slider formControlName="AmountRequired" [min]="0" [max]="1000000"></p-slider>
-      </div>
-      <div class="col-12 lg:col-42 flex-column">
-        <label class="flex">Terms (# Of Months): {{calculateFinanceRequestForm.value.Term}}</label>
-        <p-slider formControlName="Term" [min]="0" [max]="36"></p-slider>
+        <div class="grid justify-content-evenly">
+          <div class="col-12 lg:col-4 flex-column">
+            <label class="flex">Product</label>
+            <p-dropdown [options]="financeProductsDropdown"
+                        formControlName="FinanceProductId"
+                        appendTo="body"
+                        optionLabel="Title"
+                        optionValue="FinanceProductId"
+                        [filter]="true"
+                        placeholder="Choose Product"
+                        [showClear]="true"
+                        (onChange)="showProduct($event)"
+            >
+
+            </p-dropdown>
+          </div>
+
+          <div class="col-12 lg:col-8 flex-column align-content-center">
+            <label class="flex mb-4">Terms (# Of Months): {{calculateFinanceRequestForm.value.Term}}</label>
+            <p-slider formControlName="Term" [min]="0" [max]="36"></p-slider>
+
+          </div>
+        </div>
+        <div class="grid">
+          <div class="col-12  flex-column">
+            <label class="flex mb-4">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired}}</label>
+            <p-slider formControlName="AmountRequired" [min]="0" [max]="1000000"></p-slider>
+          </div>
+        </div>
 
       </div>
-    </div>
+
+      <p-confirmDialog appendTo="body" ></p-confirmDialog>
+
+
+    </p-fieldset>
   </div>
+  <div class="surface-card shadow-1 w-full border-round" fxFlex fxFlex.gt-md="40"
+       [ngClass.xs]="['p-3','justify-content-center']"
+       [ngClass.gt-xs]="['p-4','justify-content-center']">
 
-  <p-confirmDialog appendTo="body" ></p-confirmDialog>
+    <div class="flex mb-3 text-center">
+      <div class="w-full flex flex-wrap gap-4">
+        <div class=" mt-3 w-full block">
+          <div class=" lg:text-lg ">
+            Package: {{this.chosenProduct?.Title}}
+          </div>
+        </div>
 
+        <div class=" mt-1 w-full block">
+          <div class=" lg:text-lg ">
+            Description: {{this.chosenProduct?.Title}}
+          </div>
+        </div>
 
-</p-fieldset>
-<div class="w-full">
-  <div class="flex mx-4 justify-content-end mt-4">
-    <p-button label="Submit" [disabled]="calculateFinanceRequestForm.invalid" (onClick)="editFinanceRequest()"></p-button>
+        <div class=" mt-1 w-full block">
+          <div class=" lg:text-lg">
+            Interest: {{this.chosenProduct?.InterestRate}}
+          </div>
+        </div>
+
+        <div class=" mt-1 w-full block">
+          <div class=" lg:text-lg ">
+            Minimum Terms: {{this.chosenProduct?.TermMin}}
+          </div>
+        </div>
+
+        <div class=" mt-1 w-full block">
+          <div class="lg:text-lg ">
+            Months Of Free Interest: {{this.chosenProduct?.MonthsFree}}
+          </div>
+        </div>
+
+        <div class=" mt-1 w-full block">
+          <div class=" lg:text-lg ">
+            Minimum Loan Amount: {{this.chosenProduct?.AmountMin }}
+          </div>
+        </div>
+
+        <div class=" mt-1 w-full block">
+          <div class="lg:text-lg ">
+            Establishment Rate: {{this.chosenProduct?.EstablishmentRate }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="w-full">
+      <div class="flex mx-4 justify-content-end mt-4">
+        <p-button label="Calculate Quote" [disabled]="calculateFinanceRequestForm.invalid" (onClick)="editFinanceRequest()"></p-button>
+      </div>
+    </div>
   </div>
 </div>
 

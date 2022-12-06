@@ -76,6 +76,7 @@
                 <th width="50">Minimum Terms</th>
                 <th width="50">Months Free</th>
                 <th width="200">Minimum Amount</th>
+                <th width="50">Establishment Rate</th>
                 <th width="50"></th>
               </tr>
             </ng-template>
@@ -113,6 +114,11 @@
                       <p-inputNumber formControlName="AmountMin" mode="currency" currency="USD" locale="en-US"></p-inputNumber>
                     </div>
                   </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <p-inputNumber formControlName="EstablishmentRate" mode="decimal" [minFractionDigits]="2"></p-inputNumber>
+                    </div>
+                  </td>
 
                   <td>
                     <div class="p-fluid">
@@ -126,6 +132,57 @@
         </ng-container>
         <div class="flex justify-content-between mt-3">
           <button pButton label="Add New Status" (click)="addFinanceProductFormArray(undefined)" type="button"></button>
+          <button pButton label="Save Changes" type="submit"></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<p-divider></p-divider>
+<div class="flex my-5 align-items-center" >
+  <div class="w-4">
+    <div class="font-semibold text-lg mb-2">Black List Group</div>
+    <div class="text-500">List of black list groups for Finance Requests (separate each by a comma)</div>
+  </div>
+  <div class="w-full">
+    <form [formGroup]="libraryForm" (submit)="saveBlackListGroups()">
+      <div class="surface-card shadow-1 p-4 w-full border-round">
+
+        <ng-container formArrayName="blackListGroupFormArray">
+          <p-table [value]="blackListGroupFormArray.controls" class="w-full">
+            <ng-template pTemplate="header">
+              <tr>
+                <th width="100">Title</th>
+                <th width="400">Expression</th>
+                <th width="50"></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-group let-i="rowIndex">
+              <tr *ngIf="!group.value._Deleted">
+                <ng-container [formGroupName]="i">
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="Title" placeholder="Title" formControlName="Title" type="text" pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input id="Expression" placeholder="Expression" formControlName="Expression" type="text"
+                             pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid">
+                      <button pButton label="x" class="p-button-danger" (click)="removeBlackListGroup(group)"></button>
+                    </div>
+                  </td>
+                </ng-container>
+              </tr>
+            </ng-template>
+          </p-table>
+        </ng-container>
+        <div class="flex justify-content-between mt-3">
+          <button pButton label="Add New Group" (click)="addBlackListGroupFormArray(undefined)" type="button"></button>
           <button pButton label="Save Changes" type="submit"></button>
         </div>
       </div>

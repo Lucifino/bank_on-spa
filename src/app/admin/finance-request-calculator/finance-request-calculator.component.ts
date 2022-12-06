@@ -47,6 +47,7 @@ const PRODUCTS_QUERY = gql`
       Title
       InterestRate
       Description
+      EstablishmentRate
       _Deleted
 
     }
@@ -55,7 +56,7 @@ const PRODUCTS_QUERY = gql`
 
 const UPDATE_FINANCE_REQUEST_MUTATION = gql`
   mutation ($edit: FinanceRequestInput!) {
-    UpdateFinanceRequest(edit: $edit) {
+    UpdateFinanceRequestCustomer(edit: $edit) {
       ResponseMessage
       ResponseLabel
       ResponseCode
@@ -75,6 +76,9 @@ export class FinanceRequestCalculatorComponent implements OnInit {
   chosenRequest: any;
   chosenRequestId: any;
 
+  chosenProduct: any;
+
+  financeProducts: any;
   financeProductsDropdown: any = [];
   titleDropdown: any = [];
 
@@ -161,11 +165,11 @@ export class FinanceRequestCalculatorComponent implements OnInit {
     }).subscribe(m => {
       console.log(m)
 
-      if(m.data?.UpdateFinanceRequest.ResponseCode === 202) {
+      if(m.data?.UpdateFinanceRequestCustomer.ResponseCode === 202) {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
-          message: m.data?.UpdateFinanceRequest.ResponseMessage ?? '',
+          message: m.data?.UpdateFinanceRequestCustomer.ResponseMessage ?? '',
           acceptLabel: 'Continue',
           accept: () => {
             this.router.navigate([`admin/quotation/${this.chosenRequestId}`]);
@@ -182,9 +186,22 @@ export class FinanceRequestCalculatorComponent implements OnInit {
       query: PRODUCTS_QUERY
     }).valueChanges.subscribe(({ data, loading }) => {
       console.log(data)
-      this.financeProductsDropdown = data.FinanceProducts;
+      this.financeProducts = data.FinanceProducts;
+      console.log(this.financeProducts)
+      this.financeProductsDropdown = JSON.parse(JSON.stringify(this.financeProducts));
       console.log(this.financeProductsDropdown)
     });
+  }
+
+  showProduct(event:any)
+  {
+    console.log(event.value)
+
+    this.chosenProduct = null
+
+    this.chosenProduct = this.financeProductsDropdown.find((x: any) => x.FinanceProductId == event.value)
+
+    console.log(this.chosenProduct)
   }
 
 }

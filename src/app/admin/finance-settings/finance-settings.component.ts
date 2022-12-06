@@ -27,6 +27,15 @@ const UPSERT_FINANCE_PRODUCT_MUTATION = gql`
     }
   }`;
 
+const UPSERT_BLACK_LIST_MUTATION = gql`
+  mutation ($input: [BlackListGroupInput!]!) {
+    UpsertBlackListGroup(input: $input) {
+      ResponseCode
+      ResponseLabel
+      ResponseMessage
+    }
+  }`;
+
 const FINANCE_STATUS_PAGINATED_QUERY = gql`
   query {
     FinanceRequestStatusesPagnated {
@@ -63,11 +72,29 @@ const FINANCE_PRODUCT_PAGINATED_QUERY = gql`
         AmountMin
         _Deleted
         MonthsFree
+        EstablishmentRate
       }
     }
   }
 `;
 
+const BLACK_LIST_PAGINATED_QUERY = gql`
+  query {
+    BlackListGroupsPaginated {
+      pageInfo {
+        hasPreviousPage
+        hasNextPage
+      }
+      totalCount
+      items{
+        BlackListGroupId
+        Title
+        Expression
+        _Deleted
+      }
+    }
+  }
+`;
 
 @Component({
   selector: 'app-finance-settings',
@@ -79,6 +106,7 @@ export class FinanceSettingsComponent implements OnInit {
   libraryForm: FormGroup = new FormGroup({
     financeStatusFormArray: new FormArray([]),
     financeProductFormArray: new FormArray([]),
+    blackListGroupFormArray: new FormArray([])
   })
 
   get financeStatusFormArray(): FormArray {
@@ -88,8 +116,11 @@ export class FinanceSettingsComponent implements OnInit {
     return this.libraryForm.get('financeProductFormArray') as FormArray;
   }
 
+  get blackListGroupFormArray(): FormArray {
+    return this.libraryForm.get('blackListGroupFormArray') as FormArray;
+  }
+
   addFinanceStatusFormArray(status?: any): void {
-    console.log(status)
     if ((!this.financeStatusFormArray.value.some((m: any) => m.FinanceRequestStatusId == status?.FinanceRequestStatusId) && status) || !status) {
       this.financeStatusFormArray.push(new FormGroup({
         Description: new FormControl(status?.Description),
@@ -99,7 +130,6 @@ export class FinanceSettingsComponent implements OnInit {
         _Deleted: new FormControl(status?._Deleted?? false)
       }));
     }
-    console.log(this.financeStatusFormArray.value)
   }
 
   addFinanceProductFormArray(product?: any): void {
@@ -112,7 +142,19 @@ export class FinanceSettingsComponent implements OnInit {
         TermMin: new FormControl(product?.TermMin ?? -1),
         AmountMin: new FormControl(product?.AmountMin),
         MonthsFree: new FormControl(product?.MonthsFree),
+        EstablishmentRate: new FormControl(product?.EstablishmentRate),
         _Deleted: new FormControl(product?._Deleted?? false)
+      }));
+    }
+  }
+
+  addBlackListGroupFormArray(group?: any): void {
+    if ((!this.blackListGroupFormArray.value.some((m: any) => m.BlackListGroupId == group?.BlackListGroupId) && group) || !group) {
+      this.blackListGroupFormArray.push(new FormGroup({
+        Expression: new FormControl(group?.Expression),
+        BlackListGroupId: new FormControl(group?.BlackListGroupId  ?? uuidv4()),
+        Title: new FormControl(group?.Title),
+        _Deleted: new FormControl(group?._Deleted?? false)
       }));
     }
   }
@@ -128,6 +170,7 @@ export class FinanceSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.getFinanceProducts()
     this.getFinanceStatuses()
+    this.getBlackListGroups()
   }
 
   saveFinanceStatuses() {
@@ -195,6 +238,39 @@ export class FinanceSettingsComponent implements OnInit {
     });
   }
 
+  saveBlackListGroups() {
+    console.log(this.blackListGroupFormArray.value)
+    this.apollo.mutate<Mutation>({
+      mutation: UPSERT_BLACK_LIST_MUTATION,
+      variables: {
+        input: this.blackListGroupFormArray.value
+      }
+    }).subscribe(m => {
+      if (m.data?.UpsertBlackListGroup.ResponseCode === 202) {
+        console.log(m)
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          acceptLabel: 'Continue',
+          rejectVisible: false,
+          message: 'BlackList Groups successfully updated',
+          accept: () => {
+            this.getBlackListGroups();
+          }
+        })
+      };
+    });
+  }
+
+  getBlackListGroups(): void {
+    this.apollo.watchQuery<Query>({
+      query: BLACK_LIST_PAGINATED_QUERY
+    }).valueChanges.subscribe(({ data, loading }) => {
+      data.BlackListGroupsPaginated?.items?.forEach(m => {
+        this.addBlackListGroupFormArray(m);
+      });
+    });
+  }
+
   removeFinanceProduct(FinanceProduct: any) {
     console.log(FinanceProduct)
     FinanceProduct.controls['_Deleted'].setValue(true);
@@ -203,6 +279,11 @@ export class FinanceSettingsComponent implements OnInit {
   removeFinanceStatus(FinanceStatus: any) {
     console.log(FinanceStatus)
     FinanceStatus.controls['_Deleted'].setValue(true);
+  }
+
+  removeBlackListGroup(Group: any) {
+    console.log(Group)
+    Group.controls['_Deleted'].setValue(true);
   }
 
 }
