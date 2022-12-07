@@ -257,7 +257,18 @@ export class FinanceRequestOverviewComponent implements OnInit {
             this.router.navigate([`admin/calculate/${m.data?.AddFinanceRequest.ResponseMessage}`]);
           }
         })
-      };
+      }
+
+      if(m.data?.AddFinanceRequest.ResponseCode === 500) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.AddFinanceRequest.ResponseMessage ?? '',
+          acceptLabel: 'Continue'
+        })
+      }
+
+
     });
   }
 

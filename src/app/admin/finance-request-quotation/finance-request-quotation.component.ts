@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService} from "primeng/api";
@@ -93,7 +93,7 @@ const APPLY_FINANCE_REQUEST_MUTATION = gql`
   templateUrl: './finance-request-quotation.component.html',
   styleUrls: ['./finance-request-quotation.component.scss']
 })
-export class FinanceRequestQuotationComponent implements OnInit {
+export class FinanceRequestQuotationComponent implements OnInit, AfterViewInit {
 
   EstablishmentFree: any;
   updateFinanceRequestDialogVisible: boolean = false;
@@ -146,6 +146,11 @@ export class FinanceRequestQuotationComponent implements OnInit {
       {code: "Ms.", label: "Ms."},
       {code: "Mrs.", label: "Mrs."}
     ]
+  }
+
+  ngAfterViewInit() {
+    this.getFinanceProducts()
+    this.getFinanceStatuses()
   }
 
   ngOnInit(): void {
@@ -205,13 +210,40 @@ export class FinanceRequestQuotationComponent implements OnInit {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
-          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? '',
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'Success',
           acceptLabel: 'Continue',
           accept: () => {
             this.router.navigate([`admin/viewer/${this.chosenRequestId}`]);
           }
         })
-      };
+      }
+
+      if(m.data?.ApplyFinanceRequest.ResponseCode === 400) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'Wrong Inputs',
+          acceptLabel: 'Continue'
+        })
+      }
+
+      if(m.data?.ApplyFinanceRequest.ResponseCode === 500) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'Server Error',
+          acceptLabel: 'Continue'
+        })
+      }
+
+      if(m.data?.ApplyFinanceRequest.ResponseCode === 501) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'System Has Not Set Cases',
+          acceptLabel: 'Continue'
+        })
+      }
     });
   }
 
@@ -237,17 +269,35 @@ export class FinanceRequestQuotationComponent implements OnInit {
     }).subscribe(m => {
       console.log(m)
 
-      if(m.data?.ApplyFinanceRequest.ResponseCode === 202) {
+      if(m.data?.UpdateFinanceRequestCustomer.ResponseCode === 202) {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
-          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? '',
+          message: m.data?.UpdateFinanceRequestCustomer.ResponseMessage ?? '',
           acceptLabel: 'Continue',
           accept: () => {
-            this.router.navigate([`admin/viewer/${this.chosenRequestId}`]);
+            this.router.navigate([`admin/quotation/${this.chosenRequestId}`]);
           }
         })
-      };
+      }
+
+      if(m.data?.UpdateFinanceRequestCustomer.ResponseCode === 400) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'Wrong Inputs',
+          acceptLabel: 'Continue'
+        })
+      }
+
+      if(m.data?.UpdateFinanceRequestCustomer.ResponseCode === 500) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? 'Server Error',
+          acceptLabel: 'Continue'
+        })
+      }
     });
   }
 

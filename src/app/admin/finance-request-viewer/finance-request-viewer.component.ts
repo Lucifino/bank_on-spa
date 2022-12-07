@@ -330,14 +330,34 @@ export class FinanceRequestViewerComponent implements OnInit {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
-          message: m.data?.UpdateFinanceRequestAdmin.ResponseMessage ?? '',
+          message: m.data?.UpdateFinanceRequestAdmin.ResponseMessage ?? 'Update Successful',
           acceptLabel: 'Continue',
           accept: () => {
             this.updateFinanceRequestDialogVisible = false;
             this.ngOnInit()
           }
         })
-      };
+      }
+
+      if(m.data?.UpdateFinanceRequestAdmin.ResponseCode === 400) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.UpdateFinanceRequestAdmin.ResponseMessage ?? 'Wrong Inputs',
+          acceptLabel: 'Continue'
+        })
+      }
+
+      if(m.data?.UpdateFinanceRequestAdmin.ResponseCode === 500) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.UpdateFinanceRequestAdmin.ResponseMessage ?? 'Server Error',
+          acceptLabel: 'Continue'
+        })
+      }
+
+
     });
   }
 
