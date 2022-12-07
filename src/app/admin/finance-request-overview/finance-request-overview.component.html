@@ -1,25 +1,58 @@
-<p>finance-request-overview works!</p>
-
 <div class="flex flex-wrap mt-5 lg:mt-0 mb-8 lg:mb-0">
   <div class="flex flex-column w-full">
-    <ng-container [formGroup]="requestTableFilter">
+    <form [formGroup]="requestTableFilter">
       <div class="w-full border-round mb-3" [ngClass.gt-sm]="['bg-gray-50', 'p-4']">
         <div class="flex" fxLayout.lt-md="column" fxLayoutGap.gt-sm="1rem">
-<!--          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-4']">-->
-<!--            <div class="field">-->
-<!--              <input pInputText formControlName="name" placeholder="Title" />-->
-<!--            </div>-->
-<!--          </div>-->
 
-          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-4']">
+          <div class="p-fluid" >
+            <div class="field">
+              <input pInputText formControlName="Name" placeholder="Name" />
+            </div>
+          </div>
+
+          <div class="p-fluid" >
+            <div class="field">
+              <input pInputText formControlName="ReferenceNo" placeholder="Reference No" />
+            </div>
+          </div>
+
+
+          <div class="p-fluid" >
+            <div class="field">
+              <p-calendar
+                formControlName="DateOfApplication"
+                hourFormat="12"
+                placeholder="Date Of Application"
+                appendTo="body"
+              ></p-calendar>
+            </div>
+          </div>
+          <div class="p-fluid" >
             <div class="field">
               <p-dropdown [options]="financeProductsDropdown"
                           formControlName="FinanceProductId"
                           appendTo="body"
-                          optionLabel="title"
+                          optionLabel="Title"
                           optionValue="FinanceProductId"
                           [filter]="true"
                           placeholder="Choose Product"
+                          [showClear]="true"
+                          (onChange)="check($event)"
+              >
+
+              </p-dropdown>
+            </div>
+          </div>
+
+          <div class="p-fluid" >
+            <div class="field">
+              <p-dropdown [options]="financeStatusDropdown"
+                          formControlName="FinanceRequestStatusId"
+                          appendTo="body"
+                          optionLabel="Title"
+                          optionValue="FinanceRequestStatusId"
+                          [filter]="true"
+                          placeholder="Choose Status"
                           [showClear]="true"
               >
 
@@ -27,21 +60,22 @@
             </div>
           </div>
 
-          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-2']">
+          <div class="p-fluid">
             <div class="field">
               <button pButton label="Filter" type="button" icon="fa-duotone fa-magnifying-glass"
                       (click)="getFinanceRequestsPaginated(0)"></button>
             </div>
           </div>
-          <div class="p-fluid" [ngClass.lt-md]="['w-full']" [ngClass.gt-md]="['w-2']">
+          <div class="p-fluid" >
             <div class="field">
-              <button pButton [disabled]="requestTableFilter.pristine" class="p-button-danger" label="Reset" type="button"
-                      icon="fa-duotone fa-xmark" (click)="getFinanceRequestsPaginated()"></button>
+              <button pButton class="p-button-danger" label="Reset" type="button"
+                      icon="fa-duotone fa-xmark" (click)="clearTableFilter()"></button>
             </div>
           </div>
         </div>
       </div>
-    </ng-container>
+    </form>
+
     <div class="flex justify-content-between justify-content-center mt-3">
       <div class="font-bold text-xl sm:text-2xl">Finance Requests</div>
       <button class="p-button-sm" pButton label="Add New Finance Request" (click)="addFinanceRequestDialogVisible=true"></button>

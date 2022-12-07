@@ -1,9 +1,9 @@
-<p>finance-settings works!</p>
+
 <p-divider></p-divider>
 <div class="flex my-5 align-items-center" >
   <div class="w-4">
     <div class="font-semibold text-lg mb-2">Finance Status</div>
-    <div class="text-500">List of statuses for Finance Requests *cases 0 to 3 need to be set or mutations will return an 501 Error/div>
+    <div class="text-500">List of statuses for Finance Requests (cases 0 to 3 need to be set)</div>
   </div>
   <div class="w-full">
     <form [formGroup]="libraryForm" (submit)="saveFinanceStatuses()">
@@ -142,7 +142,7 @@
 <div class="flex my-5 align-items-center" >
   <div class="w-4">
     <div class="font-semibold text-lg mb-2">Black List Group</div>
-    <div class="text-500">List of black list groups for Finance Requests (separate each by a comma) *cases 1 and 2 need to be set or mutations will return an 501 Error</div>
+    <div class="text-500">List of black list groups for Finance Requests (separate each by a comma) (cases 1 to 2 need to be set)</div>
   </div>
   <div class="w-full">
     <form [formGroup]="libraryForm" (submit)="saveBlackListGroups()">
@@ -174,7 +174,7 @@
                   </td>
                   <td>
                     <div class="p-fluid w-full">
-                      <input pInputText name="_case"  formControlName="_case" type="number" />
+                      <input pInputText name="_case" id="code2" formControlName="_case" type="number" />
                     </div>
                   </td>
                   <td>

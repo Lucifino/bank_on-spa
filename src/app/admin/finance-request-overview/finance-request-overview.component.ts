@@ -4,7 +4,7 @@ import {FormBuilder, FormControl} from "@angular/forms";
 import {ConfirmationService} from "primeng/api";
 import {Title} from "@angular/platform-browser";
 import {Apollo, gql} from "apollo-angular";
-import {formatISO, getYear, format} from 'date-fns';
+import {formatISO, getYear, format, subDays} from 'date-fns';
 import {
   FinanceProductCollectionSegment, FinanceRequestCollectionSegment, FinanceRequestFilterInput,
   Mutation,
@@ -21,7 +21,9 @@ const REQUESTS_QUERY = gql`
     FinanceRequestsPaginated (
       skip: $skip,
       where: $where,
-      take: $take) {
+      take: $take,
+      order: {DateOfApplication: DESC}
+    ) {
       pageInfo {
         hasPreviousPage
         hasNextPage
@@ -55,6 +57,25 @@ const ADD_FINANCE_REQUEST_MUTATION = gql`
       ResponseMessage
       ResponseLabel
       ResponseCode
+    }
+  }
+`;
+
+const PRODUCTS_QUERY = gql`
+  query {
+    FinanceProducts  {
+      FinanceProductId
+      Title
+    }
+  }
+`;
+
+const STATUSES_QUERY = gql`
+  query {
+    FinanceRequestStatuses  {
+      FinanceRequestStatusId
+      Title
+
     }
   }
 `;
@@ -96,7 +117,15 @@ export class FinanceRequestOverviewComponent implements OnInit {
   requestTableFilter = this.formBuilder.group({
     Name: new FormControl(),
     ReferenceNo: new FormControl(),
-    DateOfPurchase: new FormControl(),
+    DateOfApplication: new FormControl(),
+    FinanceProductId: new FormControl(),
+    FinanceRequestStatusId: new FormControl(),
+  });
+
+  tableFilter = this.formBuilder.group({
+    Name: new FormControl(),
+    ReferenceNo: new FormControl(),
+    DateOfApplication: new FormControl(),
     FinanceProductId: new FormControl(),
     FinanceRequestStatusId: new FormControl(),
   });
@@ -132,9 +161,8 @@ export class FinanceRequestOverviewComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(formatISO(new Date().getUTCDate()));
-    var testDate = new Date()
-    console.log(`${testDate.getDate()}-${testDate.getMonth()}-${testDate.getUTCFullYear()}`)
+    this.getFinanceProducts()
+    this.getFinanceStatuses()
     this.getFinanceRequestsPaginated()
   }
 
@@ -161,6 +189,12 @@ export class FinanceRequestOverviewComponent implements OnInit {
         contains: this.requestTableFilter.value.ReferenceNo
       }
     }
+    if (this.requestTableFilter.value.DateOfApplication) {
+      filter.DateOfApplication = {
+        gte: formatISO(new Date(this.requestTableFilter.value.DateOfApplication), {representation: 'date'}),
+        lte: formatISO(subDays(new Date(this.requestTableFilter.value.DateOfApplication), -1),{representation: 'date'})
+      };
+    }
     if (this.requestTableFilter.value.FinanceProductId) {
       filter.FinanceProductId = {
         eq: this.requestTableFilter.value.FinanceProductId
@@ -171,6 +205,8 @@ export class FinanceRequestOverviewComponent implements OnInit {
         eq: this.requestTableFilter.value.FinanceRequestStatusId
       }
     }
+
+    console.log(filter)
 
     this.apollo.watchQuery<Query>({
       query: REQUESTS_QUERY,
@@ -244,11 +280,46 @@ export class FinanceRequestOverviewComponent implements OnInit {
     }).subscribe(m => {
       console.log(m)
 
-
-      window.location.href = "m"
+      window.location.href = `${m.url? m.url: 'https://kind-sand-099505e10.2.azurestaticapps.net/admin'}`
 
 
     });
+  }
+
+  getFinanceStatuses() {
+
+    this.apollo.watchQuery<Query>({
+      query: STATUSES_QUERY
+    }).valueChanges.subscribe(({ data, loading }) => {
+      console.log(data)
+      this.financeStatusDropdown = data.FinanceRequestStatuses;
+      console.log(this.financeStatusDropdown)
+
+    });
+  }
+
+  getFinanceProducts() {
+
+    this.apollo.watchQuery<Query>({
+      query: PRODUCTS_QUERY
+    }).valueChanges.subscribe(({ data, loading }) => {
+      console.log(data)
+      this.financeProductsDropdown = data.FinanceProducts;
+      console.log(this.financeProductsDropdown)
+
+    });
+  }
+
+  check(event:any)
+  {
+    console.log(event)
+    console.log(this.requestTableFilter.value)
+  }
+
+  clearTableFilter()
+  {
+    this.requestTableFilter.reset()
+    this.getFinanceRequestsPaginated()
   }
 
 
