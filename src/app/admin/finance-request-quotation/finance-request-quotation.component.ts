@@ -53,6 +53,7 @@ const PRODUCTS_QUERY = gql`
     FinanceProducts  {
 
       MonthsFree
+      EstablishmentRate
       FinanceProductId
       AmountMin
       TermMin
@@ -67,7 +68,7 @@ const PRODUCTS_QUERY = gql`
 
 const UPDATE_FINANCE_REQUEST_MUTATION = gql`
   mutation ($edit: FinanceRequestInput!) {
-    UpdateFinanceRequest(edit: $edit) {
+    UpdateFinanceRequestCustomer(edit: $edit) {
       ResponseMessage
       ResponseLabel
       ResponseCode
@@ -86,6 +87,7 @@ const APPLY_FINANCE_REQUEST_MUTATION = gql`
 `;
 
 
+
 @Component({
   selector: 'app-finance-request-quotation',
   templateUrl: './finance-request-quotation.component.html',
@@ -93,8 +95,19 @@ const APPLY_FINANCE_REQUEST_MUTATION = gql`
 })
 export class FinanceRequestQuotationComponent implements OnInit {
 
+  EstablishmentFree: any;
+  updateFinanceRequestDialogVisible: boolean = false;
+
+  monthMin: number = 0;
+  monthMax: number = 120;
+
+  amountMin: number = 0;
+  amountMax: number = 1000000;
+
   financeStatuses: any = [];
   financeProducts: any = [];
+  titleDropdown: any = [];
+
   submittedStatus: any;
 
   chosenRequest: any;
@@ -110,6 +123,7 @@ export class FinanceRequestQuotationComponent implements OnInit {
     DateOfBirth: new FormControl(),
     Mobile: new FormControl(),
     Email: new FormControl(),
+    ReferenceNo: new FormControl(),
     FinanceProductId: new FormControl(),
     FinanceRequestId: new FormControl(),
     FinanceRequestStatusId: new FormControl(),
@@ -125,7 +139,14 @@ export class FinanceRequestQuotationComponent implements OnInit {
     private titleService: Title,
     private apollo: Apollo,
     private router: Router,
-  ) { }
+  )
+  {
+    this.titleDropdown = [
+      {code: "Mr.", label: "Mr."},
+      {code: "Ms.", label: "Ms."},
+      {code: "Mrs.", label: "Mrs."}
+    ]
+  }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
@@ -149,15 +170,21 @@ export class FinanceRequestQuotationComponent implements OnInit {
 
       let submitRequest = this.chosenRequest
 
+      let dateParser = new Date(submitRequest.DateOfBirth)
+
+
       this.quoteFinanceRequestForm.patchValue(submitRequest)
+
+
+      this.quoteFinanceRequestForm.patchValue({DateOfBirth: dateParser})
 
       this.chosenProduct = this.financeProducts.find((x:any) => x.FinanceProductId == this.quoteFinanceRequestForm.value.FinanceProductId)
 
-      this.calculateRepayment(this.chosenProduct.FinanceProductId);
+      this.calculateRepayment(this.chosenProduct);
     });
   }
 
-  editFinanceRequest()
+  submitFinanceRequest()
   {
     this.quoteFinanceRequestForm.patchValue({DateOfBirth: formatISO(new Date(this.quoteFinanceRequestForm.value.DateOfBirth) , {representation: 'date'})})
 
@@ -188,23 +215,81 @@ export class FinanceRequestQuotationComponent implements OnInit {
     });
   }
 
+  updateForm()
+  {
+    this.updateFinanceRequestDialogVisible = true
+  }
+
+  editFinanceRequest()
+  {
+    this.quoteFinanceRequestForm.patchValue({DateOfBirth: formatISO(new Date(this.quoteFinanceRequestForm.value.DateOfBirth) , {representation: 'date'})})
+
+    let editValue = this.quoteFinanceRequestForm.value
+
+    this.apollo.mutate<Mutation>({
+      mutation: UPDATE_FINANCE_REQUEST_MUTATION,
+      variables: {
+        edit: editValue
+      },
+      context: {
+        useMultipart: true
+      }
+    }).subscribe(m => {
+      console.log(m)
+
+      if(m.data?.ApplyFinanceRequest.ResponseCode === 202) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message: m.data?.ApplyFinanceRequest.ResponseMessage ?? '',
+          acceptLabel: 'Continue',
+          accept: () => {
+            this.router.navigate([`admin/viewer/${this.chosenRequestId}`]);
+          }
+        })
+      };
+    });
+  }
+
   calculateRepayment(financeProduct: any)
   {
     let amountAsk = this.quoteFinanceRequestForm.value.AmountRequired
     let interest = 1 + financeProduct.InterestRate
     let months = this.quoteFinanceRequestForm.value.Term * 3
     let monthsFree = financeProduct.MonthsFree
-    let estabFee = 300
+    let estabRate = this.chosenProduct.EstablishmentRate
+    let estabFee = amountAsk * estabRate
     let interestPerMonth = interest/months
     let loanMonthlyPartition = amountAsk / months
     let freeMonthCounter = 0;
     let totalLoan = 0
 
+    this.amountMin = financeProduct.AmountMin
+    this.monthMin = financeProduct.TermMin
+
+    console.log(this.quoteFinanceRequestForm.value.Term)
+
+    if(this.quoteFinanceRequestForm.value.Term < this.monthMin)
+      this.quoteFinanceRequestForm.patchValue({Term: financeProduct.TermMin})
+
+    if(this.quoteFinanceRequestForm.value.AmountRequired < this.amountMin)
+      this.quoteFinanceRequestForm.patchValue({AmountRequired: financeProduct.AmountMin})
+
+
+    console.log(this.quoteFinanceRequestForm.value.Term)
+
+    console.log(loanMonthlyPartition)
+    console.log(interestPerMonth)
+    console.log(loanMonthlyPartition * months)
+    console.log((loanMonthlyPartition * (1+interestPerMonth)))
+    console.log((loanMonthlyPartition * (1+interestPerMonth)) * months)
+
     for(var i = 0; i < months; i++)
     {
-      if(freeMonthCounter >= monthsFree)
+      if(i >= monthsFree)
       {
-        totalLoan = totalLoan + (loanMonthlyPartition * interestPerMonth)
+        console.log(i)
+        totalLoan = totalLoan + (loanMonthlyPartition * interest)
       }
       else
       {
@@ -212,7 +297,11 @@ export class FinanceRequestQuotationComponent implements OnInit {
       }
     }
 
+    this.EstablishmentFree = estabFee
+
+    console.log(totalLoan)
     totalLoan = totalLoan + estabFee
+    console.log(totalLoan)
     let monthlyPayment = totalLoan / months
 
     this.quoteFinanceRequestForm.patchValue({TotalRepayment: totalLoan})
@@ -245,6 +334,19 @@ export class FinanceRequestQuotationComponent implements OnInit {
 
       this.getFinanceRequest(this.chosenRequestId)
     });
+  }
+
+  calculateProduct()
+  {
+    this.chosenProduct = this.financeProducts.find((x:any) => x.FinanceProductId == this.quoteFinanceRequestForm.value.FinanceProductId)
+
+    this.calculateRepayment(this.chosenProduct);
+
+  }
+
+  continue()
+  {
+    this.updateFinanceRequestDialogVisible = false;
   }
 
 

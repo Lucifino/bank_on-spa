@@ -3,7 +3,7 @@
 <div class="flex my-5 align-items-center" >
   <div class="w-4">
     <div class="font-semibold text-lg mb-2">Finance Status</div>
-    <div class="text-500">List of statuses for Finance Requests</div>
+    <div class="text-500">List of statuses for Finance Requests *cases 0 to 3 need to be set or mutations will return an 501 Error/div>
   </div>
   <div class="w-full">
     <form [formGroup]="libraryForm" (submit)="saveFinanceStatuses()">
@@ -142,7 +142,7 @@
 <div class="flex my-5 align-items-center" >
   <div class="w-4">
     <div class="font-semibold text-lg mb-2">Black List Group</div>
-    <div class="text-500">List of black list groups for Finance Requests (separate each by a comma)</div>
+    <div class="text-500">List of black list groups for Finance Requests (separate each by a comma) *cases 1 and 2 need to be set or mutations will return an 501 Error</div>
   </div>
   <div class="w-full">
     <form [formGroup]="libraryForm" (submit)="saveBlackListGroups()">
@@ -154,6 +154,7 @@
               <tr>
                 <th width="100">Title</th>
                 <th width="400">Expression</th>
+                <th width="100">Case</th>
                 <th width="50"></th>
               </tr>
             </ng-template>
@@ -169,6 +170,11 @@
                     <div class="p-fluid w-full">
                       <input id="Expression" placeholder="Expression" formControlName="Expression" type="text"
                              pInputText />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="p-fluid w-full">
+                      <input pInputText name="_case"  formControlName="_case" type="number" />
                     </div>
                   </td>
                   <td>

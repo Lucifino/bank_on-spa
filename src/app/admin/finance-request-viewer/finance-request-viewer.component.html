@@ -5,26 +5,37 @@
       <div class="w-full lg:w-6 flex flex-wrap gap-4">
         <div class=" mt-3 w-full block">
           <div class="font-bold text-xl sm:text-2xl">
-            {{this.chosenRequest?.Title}} {{this.chosenRequest?.FirstName}} {{this.chosenRequest?.LastName}}
+            {{this.adminFinanceRequestForm?.value?.Title}}
+            {{this.adminFinanceRequestForm?.value?.FirstName}}
+            {{this.adminFinanceRequestForm?.value?.LastName}}
           </div>
           <span class="block text-500 font-medium mb-1"
-          >Reference No: {{this.chosenRequest?.ReferenceNo}}
+          >Reference: {{this.adminFinanceRequestForm?.value?.ReferenceNo}}
           </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Mobile: {{this.chosenRequest?.Mobile}}
+          >Mobile: {{this.adminFinanceRequestForm?.value?.Mobile}}
           </div>
+          <span class="block text-500 font-medium mb-1"
+          >{{!this.adminFinanceRequestForm?.value?._BlackListMobileFlag? "Approved Mobile Number": "Black Listed Number"}}
+          </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Email: {{this.chosenRequest?.Email}}
+          >Email: {{this.adminFinanceRequestForm?.value?.Email}}
           </div>
+          <span class="block text-500 font-medium mb-1"
+          >{{!this.adminFinanceRequestForm?.value?._BlackListDomainFlag? "Approved Email": "Black Listed Domain"}}
+          </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Date Of Birth: {{this.chosenRequest?.DateOfBirth | date: 'mediumDate'}}
+          >Date Of Birth: {{this.adminFinanceRequestForm?.value?.DateOfBirth | date: 'mediumDate'}}
           </div>
+          <span class="block text-500 font-medium mb-1"
+          >{{!this.adminFinanceRequestForm?.value?._UnderAgeFlag? "Approved Age": "Under-aged"}}
+          </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
@@ -33,23 +44,23 @@
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Finance Amount: ${{this.chosenRequest?.AmountRequired | number: '1.2'}}
+          >Finance Amount: ${{this.adminFinanceRequestForm?.value?.AmountRequired | number: '1.2'}}
           </div>
           <span class="block text-500 font-medium mb-1"
-          >Payment Over {{this.chosenRequest?.Term * 3}} Months
+          >Payment Over {{this.adminFinanceRequestForm?.value?.Term * 3}} Months
           </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Chosen Product: {{this.chosenRequest?.FinanceProduct?.Title}}
+          >Chosen Product: {{this.chosenProduct?.Title}}
           </div>
           <span class="block text-500 font-medium mb-1"
-          >With An Interest Rate Of: {{this.chosenRequest?.FinanceProduct?.InterestRate * 10 | number: '1.4'}}%
+          >With An Interest Rate Of: {{this.chosenProduct?.InterestRate * 10 | number: '1.4'}}%
           </span>
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Repayments From: ${{this.chosenRequest?.MonthlyRepayment? this.chosenRequest?.MonthlyRepayment: 0 | number: '1.2'}}
+          >Repayments From: ${{this.adminFinanceRequestForm?.value?.MonthlyRepayment | number: '1.2'}}
           </div>
           <span class="block text-500 font-medium mb-1"
           >Monthly
@@ -57,10 +68,10 @@
         </div>
         <div class=" w-full block">
           <div class="block font-medium mb-1 text-lg"
-          >Total Payment: ${{this.chosenRequest?.TotalRepayment? this.chosenRequest?.TotalRepayment: 0 | number: '1.2'}}
+          >Total Payment: ${{this.adminFinanceRequestForm?.value?.TotalRepayment | number: '1.2'}}
           </div>
           <span class="block text-500 font-medium mb-1"
-          >Including A $300 Establishment Fee
+          >Including A ${{this.EstablishmentFree | number: '1.2'}} Establishment Fee
           </span>
         </div>
       </div>
@@ -70,10 +81,10 @@
 
 
 
-  <div class="surface-card shadow-1 p-3 w-full mb-2 md:mb-0 md:w-6 md:ml-2 fadeinup animation-linear animation-duration-500 animation-delay-100">
+  <div class="surface-card  shadow-1 p-3 w-full mb-2 md:mb-0 md:w-6 md:ml-2 fadeinup animation-linear animation-duration-500 animation-delay-100">
     <div class="font-bold text-xl sm:text-2xl mt-3 mb-6">History</div>
 
-    <div class="flex w-full h-24rem overflow-y-scroll">
+    <div class="flex w-full h-30rem overflow-y-scroll">
       <p-timeline [value]="chosenRequestHistory?.items! ?? []" class="log-timeline">
         <ng-template pTemplate="marker" let-icon>
           <ng-container *ngIf="icon.Title.includes('Creation'), else pending">
@@ -150,13 +161,147 @@
     ></p-paginator>
 
   </div>
+
 </div>
 
 
 <div class="flex justify-content-end mt-4">
 
-  <span class="text-600 text-lg font-bold font-italic">*Warning these features are admin only and will be affected by least privilage access on further iterations</span>
+  <span class="text-600 text-lg font-bold font-italic">*Admin features only. Will be affected by least privilage access on further iterations</span>
 
-  <button class="mx-4" id="submitBtn1" pButton label="Admin Insert Log" type="submit"></button>
-  <button id="submitBtn2" pButton label="Admin Update Ticket" type="submit"></button>
+  <button class="mx-4" id="submitBtn1" pButton label="Admin Return To Calculation" (click)="routeToCalculate()"></button>
+  <button id="submitBtn2" pButton label="Admin Update Ticket" (click)="updateForm($event)"></button>
 </div>
+
+<p-sidebar position="right" [(visible)]="updateFinanceRequestDialogVisible" [style]="{'height': '100%'}"
+>
+  <div class="text-xl font-bold mb-4">Add New Finance Request</div>
+  <form [formGroup]="adminFinanceRequestForm" >
+    <div class="p-fluid">
+      <div class="field">
+        <label>Title</label>
+        <p-dropdown [options]="titleDropdown"
+                    formControlName="Title"
+                    appendTo="body"
+                    optionLabel="label"
+                    optionValue="code"
+                    [filter]="true"
+                    placeholder="Choose Title"
+                    [showClear]="true"
+        >
+
+        </p-dropdown>
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="FirstName">Firstname</label>
+        <input pInputText name="FirstName" id="FirstName" formControlName="FirstName" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="LastName">Lastname</label>
+        <input pInputText name="LastName" id="LastName" formControlName="LastName" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="Email">Email</label>
+        <input pInputText name="Email" id="Email" formControlName="Email" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label for="Mobile">Mobile Number</label>
+        <input pInputText name="Mobile" id="Mobile" formControlName="Mobile" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label>Date Of Birth</label>
+        <p-calendar formControlName="DateOfBirth" hourFormat="12" appendTo="body"></p-calendar>
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label>Number of Terms (1 term = 3 months): {{adminFinanceRequestForm.value.Term}}</label>
+        <p-slider formControlName="Term" [min]="monthMin" [max]="monthMax"></p-slider>
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label>Amount Required: ${{adminFinanceRequestForm.value.AmountRequired | number: '1.2'}}</label>
+        <p-slider formControlName="AmountRequired" [min]="amountMin" [max]="amountMax"></p-slider>
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label class="flex">Product</label>
+        <p-dropdown [options]="financeProducts"
+                    formControlName="FinanceProductId"
+                    appendTo="body"
+                    optionLabel="Title"
+                    optionValue="FinanceProductId"
+                    [filter]="true"
+                    placeholder="Choose Product"
+                    [showClear]="true"
+                    (onChange)="calculateProduct()"
+        >
+
+        </p-dropdown>
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label class="flex">Product</label>
+        <p-dropdown [options]="financeStatuses"
+                    formControlName="FinanceRequestStatusId"
+                    appendTo="body"
+                    optionLabel="Title"
+                    optionValue="FinanceRequestStatusId"
+                    [filter]="true"
+                    placeholder="Choose Status"
+                    [showClear]="true"
+        >
+
+        </p-dropdown>
+      </div>
+    </div>
+
+    <div class="p-fluid">
+      <div class="field">
+        <label class="flex">Under Age Flag</label>
+        <p-inputSwitch formControlName="_UnderAgeFlag"></p-inputSwitch>
+
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label class="flex">BlackList Mobile</label>
+        <p-inputSwitch formControlName="_BlackListMobileFlag"></p-inputSwitch>
+
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
+        <label class="flex">BlackList Domain</label>
+        <p-inputSwitch formControlName="_BlackListDomainFlag"></p-inputSwitch>
+
+      </div>
+    </div>
+
+
+    <div class="flex w-full block">
+      <button id="submitBtn3" class="w-full" pButton label="Continue" type="submit" (click)="updateFinanceRequest()"></button>
+
+    </div>
+  </form>
+</p-sidebar>
+
+<p-confirmDialog appendTo="body" ></p-confirmDialog>
+

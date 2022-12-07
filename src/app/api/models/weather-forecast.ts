@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 export interface WeatherForecast {
-  date?: string;
-  summary?: null | string;
-  temperatureC?: number;
-  temperatureF?: number;
+  Date?: string;
+  Summary?: null | string;
+  TemperatureC?: number;
+  TemperatureF?: number;
 }

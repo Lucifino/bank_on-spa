@@ -229,20 +229,23 @@ export class FinanceRequestOverviewComponent implements OnInit {
     let testDate = new Date(this.financeRequestForm.value.DateOfBirth)
     var dateOfBirth = `${testDate.getUTCFullYear()}-${testDate.getMonth()}-${testDate.getDate()}`
     let newRequest: FinanceRequestProxy = {
-        amountRequired: this.financeRequestForm.value.AmountRequired,
-        term: this.financeRequestForm.value.Term,
-        title: this.financeRequestForm.value.Title,
-        firstName: this.financeRequestForm.value.FirstName,
-        lastName: this.financeRequestForm.value.LastName,
-        dateOfBirth: format(new Date(this.financeRequestForm.value.DateOfBirth), 'yyyy-MM-dd'),
-        mobile: this.financeRequestForm.value.Mobile,
-        email: this.financeRequestForm.value.Email,
+        AmountRequired: this.financeRequestForm.value.AmountRequired,
+        Term: this.financeRequestForm.value.Term,
+        Title: this.financeRequestForm.value.Title,
+        FirstName: this.financeRequestForm.value.FirstName,
+        LastName: this.financeRequestForm.value.LastName,
+        DateOfBirth: format(new Date(this.financeRequestForm.value.DateOfBirth), 'yyyy-MM-dd'),
+        Mobile: this.financeRequestForm.value.Mobile,
+        Email: this.financeRequestForm.value.Email,
     }
 
-    this.bankOnService.apiBankOnSaveFinanceRequestAndRedirectPost$Response({
+    this.bankOnService.apiBankOnSaveFinanceRequestAndRedirectPost$Json$Response({
       body: newRequest
     }).subscribe(m => {
       console.log(m)
+
+
+      window.location.href = "m"
 
 
     });

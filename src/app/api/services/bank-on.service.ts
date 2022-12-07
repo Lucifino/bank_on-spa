@@ -29,13 +29,13 @@ export class BankOnService extends BaseService {
 
   /**
    * This method provides access to the full `HttpResponse`, allowing access to response headers.
-   * To access only the response body, use `apiBankOnSaveFinanceRequestAndRedirectPost()` instead.
+   * To access only the response body, use `apiBankOnSaveFinanceRequestAndRedirectPost$Plain()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiBankOnSaveFinanceRequestAndRedirectPost$Response(params?: {
+  apiBankOnSaveFinanceRequestAndRedirectPost$Plain$Response(params?: {
     body?: FinanceRequestProxy
-  }): Observable<StrictHttpResponse<Blob>> {
+  }): Observable<StrictHttpResponse<string>> {
 
     const rb = new RequestBuilder(this.rootUrl, BankOnService.ApiBankOnSaveFinanceRequestAndRedirectPostPath, 'post');
     if (params) {
@@ -43,28 +43,69 @@ export class BankOnService extends BaseService {
     }
 
     return this.http.request(rb.build({
-      responseType: 'blob',
-      accept: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      responseType: 'text',
+      accept: 'text/plain'
     })).pipe(
       filter((r: any) => r instanceof HttpResponse),
       map((r: HttpResponse<any>) => {
-        return r as StrictHttpResponse<Blob>;
+        return r as StrictHttpResponse<string>;
       })
     );
   }
 
   /**
    * This method provides access to only to the response body.
-   * To access the full response (for headers, for example), `apiBankOnSaveFinanceRequestAndRedirectPost$Response()` instead.
+   * To access the full response (for headers, for example), `apiBankOnSaveFinanceRequestAndRedirectPost$Plain$Response()` instead.
    *
    * This method sends `application/*+json` and handles request body of type `application/*+json`.
    */
-  apiBankOnSaveFinanceRequestAndRedirectPost(params?: {
+  apiBankOnSaveFinanceRequestAndRedirectPost$Plain(params?: {
     body?: FinanceRequestProxy
-  }): Observable<Blob> {
+  }): Observable<string> {
 
-    return this.apiBankOnSaveFinanceRequestAndRedirectPost$Response(params).pipe(
-      map((r: StrictHttpResponse<Blob>) => r.body as Blob)
+    return this.apiBankOnSaveFinanceRequestAndRedirectPost$Plain$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
+    );
+  }
+
+  /**
+   * This method provides access to the full `HttpResponse`, allowing access to response headers.
+   * To access only the response body, use `apiBankOnSaveFinanceRequestAndRedirectPost$Json()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiBankOnSaveFinanceRequestAndRedirectPost$Json$Response(params?: {
+    body?: FinanceRequestProxy
+  }): Observable<StrictHttpResponse<string>> {
+
+    const rb = new RequestBuilder(this.rootUrl, BankOnService.ApiBankOnSaveFinanceRequestAndRedirectPostPath, 'post');
+    if (params) {
+      rb.body(params.body, 'application/*+json');
+    }
+
+    return this.http.request(rb.build({
+      responseType: 'json',
+      accept: 'text/json'
+    })).pipe(
+      filter((r: any) => r instanceof HttpResponse),
+      map((r: HttpResponse<any>) => {
+        return r as StrictHttpResponse<string>;
+      })
+    );
+  }
+
+  /**
+   * This method provides access to only to the response body.
+   * To access the full response (for headers, for example), `apiBankOnSaveFinanceRequestAndRedirectPost$Json$Response()` instead.
+   *
+   * This method sends `application/*+json` and handles request body of type `application/*+json`.
+   */
+  apiBankOnSaveFinanceRequestAndRedirectPost$Json(params?: {
+    body?: FinanceRequestProxy
+  }): Observable<string> {
+
+    return this.apiBankOnSaveFinanceRequestAndRedirectPost$Json$Response(params).pipe(
+      map((r: StrictHttpResponse<string>) => r.body as string)
     );
   }
 

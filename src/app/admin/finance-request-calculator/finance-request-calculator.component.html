@@ -4,7 +4,7 @@
   <div class="surface-card shadow-1 p-4 w-full min-w-0 h-full border-round"
        fxFlex
        fxFlex.gt-md="60">
-    <p-fieldset [formGroup]="calculateFinanceRequestForm" legend="Finance Request Form" styleClass="flex flex-column mx-4">
+    <p-fieldset [formGroup]="calculateFinanceRequestForm" legend="Finance Request Form: Options" styleClass="flex flex-column mx-4">
       <div class="flex flex-column gap-3">
         <div class="grid justify-content-between">
           <div class="col-12 lg:col-4 flex-column ">
@@ -77,7 +77,7 @@
         </div>
         <div class="grid">
           <div class="col-12  flex-column">
-            <label class="flex mb-4">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired}}</label>
+            <label class="flex mb-4">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired | number: '1.2'}}</label>
             <p-slider formControlName="AmountRequired" [min]="0" [max]="1000000"></p-slider>
           </div>
         </div>

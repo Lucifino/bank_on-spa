@@ -91,6 +91,7 @@ const BLACK_LIST_PAGINATED_QUERY = gql`
         Title
         Expression
         _Deleted
+        _case
       }
     }
   }
@@ -154,6 +155,7 @@ export class FinanceSettingsComponent implements OnInit {
         Expression: new FormControl(group?.Expression),
         BlackListGroupId: new FormControl(group?.BlackListGroupId  ?? uuidv4()),
         Title: new FormControl(group?.Title),
+        _case: new FormControl(group?._case),
         _Deleted: new FormControl(group?._Deleted?? false)
       }));
     }

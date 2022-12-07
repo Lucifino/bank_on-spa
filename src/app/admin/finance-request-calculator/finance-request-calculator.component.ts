@@ -142,6 +142,11 @@ export class FinanceRequestCalculatorComponent implements OnInit {
 
       this.calculateFinanceRequestForm.patchValue({DateOfBirth: dateParser})
 
+
+      this.chosenProduct = this.financeProductsDropdown.find((x: any) => x.FinanceProductId == this.calculateFinanceRequestForm.value.FinanceProductId)
+
+
+      console.log(this.chosenProduct)
       console.log(this.calculateFinanceRequestForm.value)
     });
   }
