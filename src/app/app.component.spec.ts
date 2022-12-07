@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'samsung-ndp-spa'`, () => {
+  it(`should have as title 'bank_on-spa'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('samsung-ndp-spa');
+    expect(app.title).toEqual('bank_on-spa');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('samsung-ndp-spa app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('bank_on-spa app is running!');
   });
 });
