@@ -107,7 +107,14 @@ export class FinanceRequestCalculatorComponent implements OnInit, AfterViewInit 
     private titleService: Title,
     private apollo: Apollo,
     private router: Router,
-  ) { }
+  )
+  {
+    this.titleDropdown = [
+      {code: "Mr.", label: "Mr."},
+      {code: "Ms.", label: "Ms."},
+      {code: "Mrs.", label: "Mrs."}
+    ]
+  }
 
   ngAfterViewInit() {
     this.getFinanceProducts()
@@ -116,13 +123,7 @@ export class FinanceRequestCalculatorComponent implements OnInit, AfterViewInit 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
       this.chosenRequestId = paramMap.get('id')
-      this.getFinanceRequest(this.chosenRequestId)
       this.getFinanceProducts()
-      this.titleDropdown = [
-        {code: "Mr.", label: "Mr."},
-        {code: "Ms.", label: "Ms."},
-        {code: "Mrs.", label: "Mrs."}
-      ]
     });
   }
 
@@ -221,6 +222,8 @@ export class FinanceRequestCalculatorComponent implements OnInit, AfterViewInit 
       console.log(this.financeProducts)
       this.financeProductsDropdown = JSON.parse(JSON.stringify(this.financeProducts));
       console.log(this.financeProductsDropdown)
+
+      this.getFinanceRequest(this.chosenRequestId)
     });
   }
 
