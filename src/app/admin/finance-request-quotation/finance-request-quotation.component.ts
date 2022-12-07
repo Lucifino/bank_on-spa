@@ -99,7 +99,7 @@ export class FinanceRequestQuotationComponent implements OnInit {
   updateFinanceRequestDialogVisible: boolean = false;
 
   monthMin: number = 0;
-  monthMax: number = 120;
+  monthMax: number = 30;
 
   amountMin: number = 0;
   amountMax: number = 1000000;

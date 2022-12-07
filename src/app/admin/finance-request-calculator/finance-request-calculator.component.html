@@ -70,15 +70,15 @@
           </div>
 
           <div class="col-12 lg:col-8 flex-column align-content-center">
-            <label class="flex mb-4">Terms (# Of Months): {{calculateFinanceRequestForm.value.Term}}</label>
-            <p-slider formControlName="Term" [min]="0" [max]="36"></p-slider>
+            <label class="flex mb-4">Terms (1 Term = 3 Months): {{calculateFinanceRequestForm.value.Term}}</label>
+            <p-slider formControlName="Term" [min]="monthMin" [max]="monthMax"></p-slider>
 
           </div>
         </div>
         <div class="grid">
           <div class="col-12  flex-column">
-            <label class="flex mb-4">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired}}</label>
-            <p-slider formControlName="AmountRequired" [min]="0" [max]="1000000"></p-slider>
+            <label class="flex mb-4">Amount Required: ${{calculateFinanceRequestForm.value.AmountRequired | number: '1.2'}}</label>
+            <p-slider formControlName="AmountRequired" [min]="amountMin" [max]="amountMax"></p-slider>
           </div>
         </div>
 
@@ -109,7 +109,7 @@
 
         <div class=" mt-1 w-full block">
           <div class=" lg:text-lg">
-            Interest: {{this.chosenProduct?.InterestRate}}
+            Interest: {{this.chosenProduct?.InterestRate * 100}}%
           </div>
         </div>
 
@@ -133,7 +133,7 @@
 
         <div class=" mt-1 w-full block">
           <div class="lg:text-lg ">
-            Establishment Rate: {{this.chosenProduct?.EstablishmentRate }}
+            Establishment Rate: {{this.chosenProduct?.EstablishmentRate * 100}}%
           </div>
         </div>
 

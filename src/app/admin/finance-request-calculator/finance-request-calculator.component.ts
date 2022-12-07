@@ -71,7 +71,11 @@ const UPDATE_FINANCE_REQUEST_MUTATION = gql`
   styleUrls: ['./finance-request-calculator.component.scss']
 })
 export class FinanceRequestCalculatorComponent implements OnInit {
+  monthMin: number = 0;
+  monthMax: number = 30;
 
+  amountMin: number = 0;
+  amountMax: number = 1000000;
 
   chosenRequest: any;
   chosenRequestId: any;
@@ -207,6 +211,17 @@ export class FinanceRequestCalculatorComponent implements OnInit {
     this.chosenProduct = this.financeProductsDropdown.find((x: any) => x.FinanceProductId == event.value)
 
     console.log(this.chosenProduct)
+
+    this.amountMin = this.chosenProduct.AmountMin
+    this.monthMin = this.chosenProduct.TermMin
+
+    console.log(this.calculateFinanceRequestForm.value.Term)
+
+    if(this.calculateFinanceRequestForm.value.Term < this.monthMin)
+      this.calculateFinanceRequestForm.patchValue({Term: this.chosenProduct.TermMin})
+
+    if(this.calculateFinanceRequestForm.value.AmountRequired < this.amountMin)
+      this.calculateFinanceRequestForm.patchValue({AmountRequired: this.chosenProduct.AmountMin})
   }
 
 }
