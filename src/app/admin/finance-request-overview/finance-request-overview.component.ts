@@ -280,10 +280,28 @@ export class FinanceRequestOverviewComponent implements OnInit {
     }).subscribe(m => {
       console.log(m)
 
-      window.location.href = `${m.url? m.url: 'https://kind-sand-099505e10.2.azurestaticapps.net/admin'}`
+      if(m.status === 200) {
+        this.confirmationService.confirm({
+          acceptVisible: true,
+          rejectVisible: false,
+          message:  'Api Success',
+          acceptLabel: 'Proceed',
+          accept: () => {
+            this.addFinanceRequestDialogVisible = false
+            this.routeToUrl(m.body)
+          }
+        })
+      }
+
+
 
 
     });
+  }
+
+  routeToUrl(url: any)
+  {
+    window.open(url)
   }
 
   getFinanceStatuses() {
