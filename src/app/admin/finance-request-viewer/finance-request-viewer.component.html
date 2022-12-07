@@ -179,6 +179,12 @@
   <form [formGroup]="adminFinanceRequestForm" >
     <div class="p-fluid">
       <div class="field">
+        <label for="ReferenceNo">Reference No</label>
+        <input pInputText name="ReferenceNo" id="ReferenceNo" formControlName="ReferenceNo" />
+      </div>
+    </div>
+    <div class="p-fluid">
+      <div class="field">
         <label>Title</label>
         <p-dropdown [options]="titleDropdown"
                     formControlName="Title"

@@ -251,7 +251,7 @@ export class FinanceRequestOverviewComponent implements OnInit {
         this.confirmationService.confirm({
           acceptVisible: true,
           rejectVisible: false,
-          message: m.data?.AddFinanceRequest.ResponseMessage ?? '',
+          message: 'Mutation Successful Routing To Ticket',
           acceptLabel: 'Continue',
           accept: () => {
             this.router.navigate([`admin/calculate/${m.data?.AddFinanceRequest.ResponseMessage}`]);

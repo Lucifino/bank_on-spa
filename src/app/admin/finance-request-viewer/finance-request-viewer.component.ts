@@ -334,7 +334,7 @@ export class FinanceRequestViewerComponent implements OnInit {
           acceptLabel: 'Continue',
           accept: () => {
             this.updateFinanceRequestDialogVisible = false;
-            this.router.navigate([`admin/viewer/${this.chosenRequestId}`]);
+            this.ngOnInit()
           }
         })
       };
