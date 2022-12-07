@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormControl} from "@angular/forms";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService} from "primeng/api";
@@ -70,7 +70,7 @@ const UPDATE_FINANCE_REQUEST_MUTATION = gql`
   templateUrl: './finance-request-calculator.component.html',
   styleUrls: ['./finance-request-calculator.component.scss']
 })
-export class FinanceRequestCalculatorComponent implements OnInit {
+export class FinanceRequestCalculatorComponent implements OnInit, AfterViewInit {
   monthMin: number = 0;
   monthMax: number = 30;
 
@@ -108,6 +108,10 @@ export class FinanceRequestCalculatorComponent implements OnInit {
     private apollo: Apollo,
     private router: Router,
   ) { }
+
+  ngAfterViewInit() {
+    this.getFinanceProducts()
+  }
 
   ngOnInit(): void {
     this.activatedRoute.paramMap.subscribe(paramMap => {
